@@ -1,6 +1,6 @@
 # LaravelPlace
 
-## Command
+## CRUD
 
 [Composer](https://getcomposer.org/Composer-Setup.exe)のインストーラをダウンロード
 
@@ -445,6 +445,67 @@ class PlaceController extends Controller
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-create.blade.php
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-edit.blade.php
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-show.blade.php
+
+## 認証の追加
+
+以下のコマンドを実行
+
+> php artisan make:auth
+
+```text
+Authentication scaffolding generated successfully.
+```
+
+> php artisan migrate
+
+プロジェクト作成時点で既に作成されている場合は以下のような結果となる
+
+```text
+Nothing to migrate.
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\PlaceController.php
+
+既存のuse演算子の行の辺りに以下の行を追加
+
+```php
+use Illuminate\Support\Facades\Auth; // 認証で使用
+```
+
+indexメソッドを修正
+
+```php
+    public function index()
+    {
+        $auth_user = Auth::user();
+        $ipp = 5;
+        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
+
+        if(isset($items)){
+            return view('placemanage.index', ['items' => $items, 'user' => $auth_user]);
+        }
+        return redirect('/place');
+    }
+```
+
+> $ nano .\Documents\GitHub\Laravel-Place\resources\views\placemanage\index.blade.php
+
+Createリンクの行の辺りに以下の行を追加
+
+```php
+            <p>
+                @if (Auth::check())
+                Hi,  {{$user->name}}!
+                @else
+                <a href="/register">{{__('Register')}}</a> | <a href="/login">Sign in</a>
+                @endif
+            </p>
+            <br />
+```
+
+
 
 ---
 

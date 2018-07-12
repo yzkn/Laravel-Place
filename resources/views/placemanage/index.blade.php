@@ -13,6 +13,14 @@
     <div class="container">
         <h1>{{ $title }}</h1>
         <div class="table-responsive">
+            <p>
+                @if (Auth::check())
+                Hi,  {{$user->name}}!
+                @else
+                <a href="/register">{{__('Register')}}</a> | <a href="/login">Sign in</a>
+                @endif
+            </p>
+            <br />
             <a href="{{ url('place/create') }}">Create</a>
             <hr />
             <table class="table table-striped">

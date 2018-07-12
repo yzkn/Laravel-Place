@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\LaravelPlace;
 
+use Illuminate\Support\Facades\Auth; // 認証で使用
 use Illuminate\Support\Facades\DB; // ページネーションで使用
 
 class PlaceController extends Controller
@@ -16,6 +17,8 @@ class PlaceController extends Controller
      */
     public function index()
     {
+        $auth_user = Auth::user();
+
         // シンプルな例
         // $items = LaravelPlace::all();
         // return $items->toArray();
@@ -25,7 +28,7 @@ class PlaceController extends Controller
         $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
 
         if(isset($items)){
-            return view('placemanage.index', ['items' => $items]);
+            return view('placemanage.index', ['items' => $items, 'user' => $auth_user]);
         }
         return redirect('/place');
     }
