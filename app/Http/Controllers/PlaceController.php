@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\LaravelPlace;
+
+use Illuminate\Support\Facades\DB; // ページネーションで使用
 
 class PlaceController extends Controller
 {
@@ -13,7 +16,18 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        //
+        // シンプルな例
+        // $items = LaravelPlace::all();
+        // return $items->toArray();
+
+        // ページネーションありの例
+        $ipp = 5;
+        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
+
+        if(isset($items)){
+            return view('placemanage.index', ['items' => $items]);
+        }
+        return redirect('/place');
     }
 
     /**
@@ -23,7 +37,7 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        //
+        return view('placemanage.place-create');
     }
 
     /**
@@ -34,7 +48,11 @@ class PlaceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $laravel_place = new LaravelPlace();
+        $form = $request->all();
+        unset($form['_token']);
+        $laravel_place->fill($form)->save();
+        return redirect('/place');
     }
 
     /**
@@ -45,7 +63,11 @@ class PlaceController extends Controller
      */
     public function show($id)
     {
-        //
+        $laravel_place = LaravelPlace::find($id);
+        if(isset($laravel_place)){
+            return view('placemanage.place-show', ['form' => $laravel_place]);
+        }
+        return redirect('/place');
     }
 
     /**
@@ -56,7 +78,11 @@ class PlaceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $laravel_place = LaravelPlace::find($id);
+        if(isset($laravel_place)){
+            return view('placemanage.place-edit', ['form' => $laravel_place]);
+        }
+        return redirect('/place');
     }
 
     /**
@@ -68,7 +94,14 @@ class PlaceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, LaravelPlace::$rules);
+        $laravel_place = LaravelPlace::find($request->id);
+        if(isset($laravel_place)){
+            $form = $request->all();
+            unset($form['_token']);
+            $laravel_place->fill($form)->save();
+        }
+        return redirect('/place');
     }
 
     /**
@@ -79,6 +112,10 @@ class PlaceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $laravel_place = LaravelPlace::find($id);
+        if(isset($laravel_place)){
+            $laravel_place->delete();
+        }
+        return redirect('/place');
     }
 }

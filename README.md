@@ -286,6 +286,165 @@ Route::resource('place', 'PlaceController');
 
 > $ php artisan serve
 
+以下のURLにアクセスして、エラーが表示されていないことを確認
+
+> http://127.0.0.1:8000
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\PlaceController.php
+
+```text
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\LaravelPlace;
+
+use Illuminate\Support\Facades\DB; // ページネーションで使用
+
+class PlaceController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        // シンプルな例
+        // $items = LaravelPlace::all();
+        // return $items->toArray();
+
+        // ページネーションありの例
+        $ipp = 5;
+        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
+
+        if(isset($items)){
+            return view('placemanage.index', ['items' => $items]);
+        }
+        return redirect('/place');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('placemanage.place-create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $laravel_place = new LaravelPlace();
+        $form = $request->all();
+        unset($form['_token']);
+        $laravel_place->fill($form)->save();
+        return redirect('/place');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $laravel_place = LaravelPlace::find($id);
+        if(isset($laravel_place)){
+            return view('placemanage.place-show', ['form' => $laravel_place]);
+        }
+        return redirect('/place');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $laravel_place = LaravelPlace::find($id);
+        if(isset($laravel_place)){
+            return view('placemanage.place-edit', ['form' => $laravel_place]);
+        }
+        return redirect('/place');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, LaravelPlace::$rules);
+        $laravel_place = LaravelPlace::find($request->id);
+        if(isset($laravel_place)){
+            $form = $request->all();
+            unset($form['_token']);
+            $laravel_place->fill($form)->save();
+        }
+        return redirect('/place');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $laravel_place = LaravelPlace::find($id);
+        if(isset($laravel_place)){
+            $laravel_place->delete();
+        }
+        return redirect('/place');
+    }
+}
+
+```
+
+以下のコマンドを実行
+
+> $ mkdir .\Documents\works\PHP\laravel-place\resources\views\placemanage
+
+作成したplacemanageフォルダの直下に、以下のファイルを作成
+
+- メインページとして使用する、アイテム一覧ページのテンプレート
+  - index.blade.php
+
+- CRUD処理を行うためのページのテンプレート
+  - place-create.blade.php
+  - place-edit.blade.php
+  - place-show.blade.php
+
+- 上記ページなどから呼び出して使用するフォーム部分のテンプレート
+  - form-create.blade.php
+  - form-edit.blade.php
+  - form-show.blade.php
+
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-create.blade.php
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-edit.blade.php
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-show.blade.php
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\index.blade.php
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-create.blade.php
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-edit.blade.php
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-show.blade.php
 
 ---
 
