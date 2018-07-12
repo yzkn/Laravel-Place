@@ -505,7 +505,34 @@ Createリンクの行の辺りに以下の行を追加
             <br />
 ```
 
+以下のコマンドを実行
 
+> $ nano .\Documents\works\PHP\laravel-place\routes\web.php
+
+```php
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+```
+
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\Auth\LoginController.php
+
+既存のuse演算子の行の辺りに以下を追加
+
+```php
+use Auth;
+use Illuminate\Http\Request;
+```
+
+他のメソッドと同じレベルに以下を追加
+
+```php
+public function logout(Request $request) {
+    Auth::logout();
+    return redirect('/login');
+}
+```
 
 ---
 
