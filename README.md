@@ -439,12 +439,170 @@ class PlaceController extends Controller
   - form-show.blade.php
 
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-create.blade.php
+
+```php
+<table>
+  <form action="/place" method="post">
+    {{ csrf_field() }}
+    <tr><th>desc: </th><td><input type="text" name="desc" value="{{old('desc')}}"></td></tr>
+    <tr><th>owner: </th><td><input type="text" name="owner" value="{{old('owner')}}"></td></tr>
+    <tr><th>lat: </th><td><input type="number" name="lat" value="{{old('lat')}}" step="0.000001"></td></tr>
+    <tr><th>lng: </th><td><input type="number" name="lng" value="{{old('lng')}}" step="0.000001"></td></tr>
+    <tr><th></th><td><input type="submit" value="send"></td></tr>
+</form>
+</table>
+
+```
+
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-edit.blade.php
+
+```php
+<table>
+  <form action="{{ url('place/'.$form->id) }}" method="post">
+    <input type="hidden" name="id" value="{{$form->id}}">
+    {{ method_field('PUT') }}
+    {{ csrf_field() }}
+    <tr><th>desc: </th><td><input type="text" name="desc" value="{{$form->desc}}"></td></tr>
+    <tr><th>owner: </th><td><input type="text" name="owner" value="{{$form->owner}}"></td></tr>
+    <tr><th>lat: </th><td><input type="number" name="lat" value="{{$form->lat}}" step="0.000001"></td></tr>
+    <tr><th>lng: </th><td><input type="number" name="lng" value="{{$form->lng}}" step="0.000001"></td></tr>
+    <tr><th></th><td><input type="submit" value="Update"></td></tr>
+  </form>
+
+  <form action="{{ url('place/'.$form->id) }}" method="post">
+    <input type="hidden" name="id" value="{{$form->id}}">
+    {{ method_field('DELETE') }}
+    {{ csrf_field() }}
+    <tr><th></th><td><input type="submit" value="Delete"></td></tr>
+  </form>
+</table>
+
+```
+
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-show.blade.php
+
+```php
+<table>
+  <form>
+    {{ csrf_field() }}
+    <tr><th>desc: </th><td><input type="text" name="desc" value="{{$form->desc}}" readonly="readonly" disabled="disabled"></td></tr>
+    <tr><th>owner: </th><td><input type="text" name="owner" value="{{$form->owner}}" readonly="readonly" disabled="disabled"></td></tr>
+    <tr><th>lat: </th><td><input type="number" name="lat" value="{{$form->lat}}" step="0.000001" readonly="readonly" disabled="disabled"></td></tr>
+    <tr><th>lng: </th><td><input type="number" name="lng" value="{{$form->lng}}" step="0.000001" readonly="readonly" disabled="disabled"></td></tr>
+  </form>
+</table>
+
+```
+
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\index.blade.php
+
+```php
+@php
+    $title = __('Posts');
+@endphp
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        .pagination { font-size: small; }
+        .pagination li { display:inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ $title }}</h1>
+        <div class="table-responsive">
+            <p>
+                @if (Auth::check())
+                Hi,  {{$user->name}}!
+                @else
+                <a href="/register">{{__('Register')}}</a> | <a href="/login">Sign in</a>
+                @endif
+            </p>
+            <br />
+            <a href="{{ url('place/create') }}">Create</a>
+            <hr />
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ __('ID') }}</th>
+                        <th>{{ __('Description') }}</th>
+                        <th>{{ __('Owner') }}</th>
+                        <th>{{ __('Latitude') }}</th>
+                        <th>{{ __('Longitude') }}</th>
+                        <th>{{ __('Created') }}</th>
+                        <th>{{ __('Updated') }}</th>
+                        <th>{{ __('Edit') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach ($items as $item)
+                    <tr>
+                        <td>
+                            <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
+                        </td>
+                        <td>{{ $item->desc }}</td>
+                        <td>{{ $item->owner }}</td>
+                        <td>{{ $item->lat }}</td>
+                        <td>{{ $item->lng }}</td>
+                        <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->updated_at }}</td>
+                        <td>
+                            <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            {{ $items->links() }}
+        </div>
+    </div>
+</body>
+</html>
+
+```
+
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-create.blade.php
+
+```php
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<body>
+  @include('placemanage.form-create')
+</body>
+</html>
+
+```
+
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-edit.blade.php
+
+```php
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<body>
+  @include('placemanage.form-edit')
+</body>
+</html>
+
+```
+
 > $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\place-show.blade.php
+
+```php
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<body>
+  @include('placemanage.form-show')
+</body>
+</html>
+
+```
 
 ## 認証の追加
 
@@ -532,6 +690,113 @@ public function logout(Request $request) {
     Auth::logout();
     return redirect('/login');
 }
+```
+
+## バリデーションの追加
+
+以下のコマンドを実行
+
+> php artisan make:request PlaceRequest
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Requests\PlaceRequest.php
+
+authorizeメソッドの先頭に以下を追加
+
+```php
+        if (strpos($this->path(), 'place/') === 0) {
+            return true;
+        }
+```
+
+rulesメソッドの中身を以下に変更
+
+```php
+        return [
+            'lat' => 'required|numeric|between:-90,90',
+            'lng' => 'required|numeric|between:0,180'
+        ];
+```
+
+他のメソッドと同じレベルに以下を追加
+
+```php
+    public function messages()
+    {
+        return [
+            'lat.required'=>'必須項目です。',
+            'lat.numeric'=>'数値を入力してください。',
+            'lat.between'=>'-90から90の範囲で入力してください。',
+            'lng.required'=>'必須項目です。',
+            'lng.numeric'=>'数値を入力してください。',
+            'lng.between'=>'0から180の範囲で入力してください。'
+        ];
+    }
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\PlaceController.php
+
+既存のuse演算子の行の辺りに以下を追加
+
+```php
+use App\Http\Requests\PlaceRequest; // バリデーションで使用
+```
+
+引数の変更
+
+```php
+    public function store(Request $request)
+    public function update(Request $request, $id)
+```
+
+それぞれ以下のように PlaceRequest へ変更
+
+```php
+    public function store(PlaceRequest $request)
+    public function update(PlaceRequest $request, $id)
+```
+
+
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-create.blade.php
+
+```php
+<table>
+  <form action="/place" method="post">
+    {{ csrf_field() }}
+    <tr><th>desc: </th><td><input type="text" name="desc" value="{{old('desc')}}">@if($errors->has('desc')){{implode($errors->get('desc'))}}@endif</td></tr>
+    <tr><th>owner: </th><td><input type="text" name="owner" value="{{old('owner')}}">@if($errors->has('owner')){{implode($errors->get('owner'))}}@endif</td></tr>
+    <tr><th>lat: </th><td><input type="number" name="lat" value="{{old('lat')}}" step="0.000001">@if($errors->has('lat')){{implode($errors->get('lat'))}}@endif</td></tr>
+    <tr><th>lng: </th><td><input type="number" name="lng" value="{{old('lng')}}" step="0.000001">@if($errors->has('lng')){{implode($errors->get('lng'))}}@endif</td></tr>
+    <tr><th></th><td><input type="submit" value="send"></td></tr>
+</form>
+</table>
+
+```
+
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\form-edit.blade.php
+
+```php
+<table>
+  <form action="{{ url('place/'.$form->id) }}" method="post">
+    <input type="hidden" name="id" value="{{$form->id}}">
+    {{ method_field('PUT') }}
+    {{ csrf_field() }}
+    <tr><th>desc: </th><td><input type="text" name="desc" value="{{$form->desc}}">@if($errors->has('desc')){{implode($errors->get('desc'))}}@endif</td></tr>
+    <tr><th>owner: </th><td><input type="text" name="owner" value="{{$form->owner}}">@if($errors->has('owner')){{implode($errors->get('owner'))}}@endif</td></tr>
+    <tr><th>lat: </th><td><input type="number" name="lat" value="{{$form->lat}}" step="0.000001">@if($errors->has('lat')){{implode($errors->get('lat'))}}@endif</td></tr>
+    <tr><th>lng: </th><td><input type="number" name="lng" value="{{$form->lng}}" step="0.000001">@if($errors->has('lng')){{implode($errors->get('lng'))}}@endif</td></tr>
+    <tr><th></th><td><input type="submit" value="Update"></td></tr>
+  </form>
+
+  <form action="{{ url('place/'.$form->id) }}" method="post">
+    <input type="hidden" name="id" value="{{$form->id}}">
+    {{ method_field('DELETE') }}
+    {{ csrf_field() }}
+    <tr><th></th><td><input type="submit" value="Delete"></td></tr>
+  </form>
+</table>
+
 ```
 
 ---

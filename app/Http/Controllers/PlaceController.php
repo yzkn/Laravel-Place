@@ -7,6 +7,7 @@ use App\LaravelPlace;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 use Illuminate\Support\Facades\DB; // ページネーションで使用
+use App\Http\Requests\PlaceRequest; // バリデーションで使用
 
 class PlaceController extends Controller
 {
@@ -46,10 +47,10 @@ class PlaceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Place\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PlaceRequest $request)
     {
         $laravel_place = new LaravelPlace();
         $form = $request->all();
@@ -91,11 +92,11 @@ class PlaceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PlaceRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PlaceRequest $request, $id)
     {
         $this->validate($request, LaravelPlace::$rules);
         $laravel_place = LaravelPlace::find($request->id);
