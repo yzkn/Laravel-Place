@@ -55,6 +55,9 @@ class PlaceController extends Controller
         $laravel_place = new LaravelPlace();
         $form = $request->all();
         unset($form['_token']);
+
+        $auth_user = Auth::user();
+        $laravel_place->user_id = $auth_user->id;
         $laravel_place->fill($form)->save();
         return redirect('/place');
     }
@@ -103,6 +106,9 @@ class PlaceController extends Controller
         if(isset($laravel_place)){
             $form = $request->all();
             unset($form['_token']);
+
+            // $auth_user = Auth::user();
+            // $laravel_place->user_id = $auth_user->id;_
             $laravel_place->fill($form)->save();
         }
         return redirect('/place');

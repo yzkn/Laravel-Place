@@ -98,6 +98,7 @@ class CreateLaravelPlaceTable extends Migration
             'laravel-place',
             function(Blueprint $table){
                 $table->increments('id');
+                $table->integer('user_id');
                 $table->string('desc');
                 $table->string('owner');
                 $table->float('lat');
@@ -159,7 +160,8 @@ class LaravelPlace extends Model
         'lng' => 'numeric'
     );
 
-    public function getData(){
+    public function getData()
+    {
         return $this->id . '\t' . $this;
     }
 }
@@ -195,7 +197,7 @@ class LaravelPlaceTableSeeder extends Seeder
     {
         $param = [
             'desc' => 'foo',
-            'owner' => '1',
+            'user_id' => 1,
             'lat' => 35.0,
             'lng' => 140.0
         ];
@@ -203,7 +205,7 @@ class LaravelPlaceTableSeeder extends Seeder
         $laravel_place->fill($param)->save();
         $param = [
             'desc' => 'bar',
-            'owner' => '2',
+            'user_id' => 2,
             'lat' => 35.1,
             'lng' => 140.1
         ];
@@ -498,7 +500,7 @@ class PlaceController extends Controller
 
 ```php
 @php
-    $title = __('Posts');
+    $title = __('Places');
 @endphp
 <html>
 <head>
@@ -528,6 +530,7 @@ class PlaceController extends Controller
                         <th>{{ __('ID') }}</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Owner') }}</th>
+                        <th>{{ __('Creator') }}</th>
                         <th>{{ __('Latitude') }}</th>
                         <th>{{ __('Longitude') }}</th>
                         <th>{{ __('Created') }}</th>
@@ -543,6 +546,7 @@ class PlaceController extends Controller
                         </td>
                         <td>{{ $item->desc }}</td>
                         <td>{{ $item->owner }}</td>
+                        <td>{{ $item->getUserName() }}</td>
                         <td>{{ $item->lat }}</td>
                         <td>{{ $item->lng }}</td>
                         <td>{{ $item->created_at }}</td>
@@ -797,6 +801,180 @@ use App\Http\Requests\PlaceRequest; // バリデーションで使用
   </form>
 </table>
 
+```
+
+## テーブル間にリレーションシップの追加
+
+| テーブル | テーブル種別 | キー | キー種別 |
+|:---|:---:|:---:|:---:|
+| Place | 子 | user_id | 外部キー |
+| User | 主 | id | 主キー |
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\LaravelPlace.php
+
+getDataメソッドの後に以下を追加
+
+```php
+  public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function getUserName(){
+        if($this->user !== NULL)
+        {
+            if($this->user->name !== NULL)
+            {
+                return $this->user->name;
+            }
+        }
+        return '';
+    }
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\User.php
+
+$hiddenの後に以下を追加
+
+```php
+    public function places()
+    {
+        return $this->hasMany('App\LaravelPlace');
+    }
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\HomeController.php
+
+既存のuse演算子の行の辺りに以下の行を追加
+
+```php
+use Illuminate\Support\Facades\Auth; // 認証で使用
+```
+
+indexメソッドを修正
+
+```php
+    public function index()
+    {
+        $auth_user = Auth::user();
+        return view('home',['user'=>$auth_user]);
+    }
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\index.blade.php
+
+table を以下に変更
+
+```php
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ __('ID') }}</th>
+                        <th>{{ __('Description') }}</th>
+                        <th>{{ __('Owner') }}</th>
+                        <th>{{ __('Creator') }}</th>
+                        <th>{{ __('Latitude') }}</th>
+                        <th>{{ __('Longitude') }}</th>
+                        <th>{{ __('Created') }}</th>
+                        <th>{{ __('Updated') }}</th>
+                        <th>{{ __('Edit') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach ($items as $item)
+                    <tr>
+                        <td>
+                            <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
+                        </td>
+                        <td>{{ $item->desc }}</td>
+                        <td>{{ $item->owner }}</td>
+                        <td>{{ $item->getUserName() }}</td>
+                        <td>{{ $item->lat }}</td>
+                        <td>{{ $item->lng }}</td>
+                        <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->updated_at }}</td>
+                        <td>
+                            <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\home.blade.php
+
+@section('content') の一番外側のdiv終了タグの直前に以下を追加
+
+```php
+
+    <hr />
+
+    Items which you made:
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{{ __('ID') }}</th>
+                    <th>{{ __('Description') }}</th>
+                    <th>{{ __('Owner') }}</th>
+                    <th>{{ __('Latitude') }}</th>
+                    <th>{{ __('Longitude') }}</th>
+                    <th>{{ __('Created') }}</th>
+                    <th>{{ __('Updated') }}</th>
+                    <th>{{ __('Edit') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($user->places as $item)
+                <tr>
+                    <td>
+                        <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
+                    </td>
+                    <td>{{ $item->desc }}</td>
+                    <td>{{ $item->owner }}</td>
+                    <td>{{ $item->lat }}</td>
+                    <td>{{ $item->lng }}</td>
+                    <td>{{ $item->created_at }}</td>
+                    <td>{{ $item->updated_at }}</td>
+                    <td>
+                        <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\PlaceController.php
+
+storeメソッドを以下に修正
+
+```php
+    public function store(PlaceRequest $request)
+    {
+        $laravel_place = new LaravelPlace();
+        $form = $request->all();
+        unset($form['_token']);
+
+        $auth_user = Auth::user();
+        $laravel_place->user_id = $auth_user->id;
+        $laravel_place->fill($form)->save();
+        return redirect('/place');
+    }
 ```
 
 ---

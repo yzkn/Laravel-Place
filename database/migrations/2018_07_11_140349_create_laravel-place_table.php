@@ -18,6 +18,7 @@ class CreateLaravelPlaceTable extends Migration
             'laravel-place',
             function(Blueprint $table){
                 $table->increments('id');
+                $table->integer('user_id');
                 $table->string('desc');
                 $table->string('owner');
                 $table->float('lat');

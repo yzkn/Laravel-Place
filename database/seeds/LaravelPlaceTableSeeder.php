@@ -14,7 +14,7 @@ class LaravelPlaceTableSeeder extends Seeder
     {
         $param = [
             'desc' => 'foo',
-            'owner' => '1',
+            'user_id' => 1,
             'lat' => 35.0,
             'lng' => 140.0
         ];
@@ -22,7 +22,7 @@ class LaravelPlaceTableSeeder extends Seeder
         $laravel_place->fill($param)->save();
         $param = [
             'desc' => 'bar',
-            'owner' => '2',
+            'user_id' => 2,
             'lat' => 35.1,
             'lng' => 140.1
         ];

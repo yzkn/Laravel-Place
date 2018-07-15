@@ -1,5 +1,5 @@
 @php
-    $title = __('Posts');
+    $title = __('Places');
 @endphp
 <html>
 <head>
@@ -29,6 +29,7 @@
                         <th>{{ __('ID') }}</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Owner') }}</th>
+                        <th>{{ __('Creator') }}</th>
                         <th>{{ __('Latitude') }}</th>
                         <th>{{ __('Longitude') }}</th>
                         <th>{{ __('Created') }}</th>
@@ -44,6 +45,7 @@
                         </td>
                         <td>{{ $item->desc }}</td>
                         <td>{{ $item->owner }}</td>
+                        <td>{{ $item->getUserName() }}</td>
                         <td>{{ $item->lat }}</td>
                         <td>{{ $item->lng }}</td>
                         <td>{{ $item->created_at }}</td>
