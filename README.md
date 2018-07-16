@@ -977,6 +977,148 @@ storeメソッドを以下に修正
     }
 ```
 
+## 検索機能の追加
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\routes\web.php
+
+```php
+Route::get('search', 'PlaceController@search');
+Route::get('where', 'PlaceController@where');
+Route::post('where', 'PlaceController@where');
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\app\Http\Controllers\PlaceController.php
+
+既存のuse演算子の行の辺りに以下を追加
+
+```php
+use Validator; // フォームからPOSTされるデータに対するバリデーションで使用
+```
+
+destroyメソッドの後ろに以下を追加
+
+```php
+    /**
+     * Find  the specified resource from storage.
+     *
+     * @param Place\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $auth_user = Auth::user();
+        $param = ['desc'=>'', 'items'=>NULL, 'user' => $auth_user];
+        return view('placemanage.search', $param);
+    }
+
+    public function where(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [ 'desc' => 'required'] // (new PlaceRequest())->rules()
+        );
+        if($validator->fails())
+        {
+            return redirect('/search')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $ipp = 5;
+
+        $place = new LaravelPlace();
+        if($request->has('desc')){
+            $place = $place->orWhere('desc','like','%'.$request->desc.'%');
+        }
+        $items = $place
+            ->orderBy('id', 'asc')
+            ->simplePaginate($ipp)
+            ->appends($request->only(['desc']));
+        $param = ['desc'=>$request->desc, 'items'=>$items];
+        return view('placemanage.search', $param);
+    }
+```
+
+以下のコマンドを実行
+
+> $ nano .\Documents\works\PHP\laravel-place\resources\views\placemanage\search.blade.php
+
+```php
+@php
+    $title = __('Places');
+@endphp
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        .pagination { font-size: small; }
+        .pagination li { display:inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ $title }}</h1>
+        <div class="table-responsive">
+            <div>
+                <form action="/where" method="post">
+                    {{ method_field('POST') }}
+                    {{ csrf_field() }}
+                    <input type="text" name="desc" value="">
+                    <input type="submit" value="{{__('Search')}}">
+                </form>
+            </div>
+            @if (isset($items))
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ __('ID') }}</th>
+                        <th>{{ __('Description') }}</th>
+                        <th>{{ __('Owner') }}</th>
+                        <th>{{ __('Creator') }}</th>
+                        <th>{{ __('Latitude') }}</th>
+                        <th>{{ __('Longitude') }}</th>
+                        <th>{{ __('Created') }}</th>
+                        <th>{{ __('Updated') }}</th>
+                        <th>{{ __('Edit') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach ($items as $item)
+                    <tr>
+                        <td>
+                            <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
+                        </td>
+                        <td>{{ $item->desc }}</td>
+                        <td>{{ $item->owner }}</td>
+                        <td>{{ $item->getUserName() }}</td>
+                        <td>{{ $item->lat }}</td>
+                        <td>{{ $item->lng }}</td>
+                        <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->updated_at }}</td>
+                        <td>
+                            <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            @if (NULL !== ($items->links()))
+            {{ $items->appends(['desc' => $desc])->links() }}
+            @endif
+            @else
+            該当するデータが見つかりませんでした。<br>
+            @endif
+        </div>
+    </div>
+</body>
+</html>
+
+```
+
 ---
 
 Copyright (c) 2018 YA-androidapp(https://github.com/YA-androidapp) All rights reserved.

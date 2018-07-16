@@ -8,6 +8,7 @@ use App\LaravelPlace;
 use Illuminate\Support\Facades\Auth; // 認証で使用
 use Illuminate\Support\Facades\DB; // ページネーションで使用
 use App\Http\Requests\PlaceRequest; // バリデーションで使用
+use Validator; // フォームからPOSTされるデータに対するバリデーションで使用
 
 class PlaceController extends Controller
 {
@@ -127,5 +128,45 @@ class PlaceController extends Controller
             $laravel_place->delete();
         }
         return redirect('/place');
+    }
+
+    /**
+     * Find  the specified resource from storage.
+     *
+     * @param Place\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $auth_user = Auth::user();
+        $param = ['desc'=>'', 'items'=>NULL, 'user' => $auth_user];
+        return view('placemanage.search', $param);
+    }
+
+    public function where(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [ 'desc' => 'required'] // (new PlaceRequest())->rules()
+        );
+        if($validator->fails())
+        {
+            return redirect('/search')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $ipp = 5;
+
+        $place = new LaravelPlace();
+        if($request->has('desc')){
+            $place = $place->orWhere('desc','like','%'.$request->desc.'%');
+        }
+        $items = $place
+            ->orderBy('id', 'asc')
+            ->simplePaginate($ipp)
+            ->appends($request->only(['desc']));
+        $param = ['desc'=>$request->desc, 'items'=>$items];
+        return view('placemanage.search', $param);
     }
 }

@@ -23,3 +23,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+Route::get('search', 'PlaceController@search');
+Route::get('where', 'PlaceController@where');
+Route::post('where', 'PlaceController@where');

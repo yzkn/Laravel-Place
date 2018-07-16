@@ -13,16 +13,14 @@
     <div class="container">
         <h1>{{ $title }}</h1>
         <div class="table-responsive">
-            <p>
-                @if (Auth::check())
-                Hi,  {{$user->name}}!
-                @else
-                <a href="/register">{{__('Register')}}</a> | <a href="/login">Sign in</a>
-                @endif
-            </p>
-            <br />
-            <a href="{{ url('place/create') }}">Create</a>
-            <hr />
+            <div>
+                <form action="/where" method="post">
+                    {{ method_field('POST') }}
+                    {{ csrf_field() }}
+                    <input type="text" name="desc" value="">
+                    <input type="submit" value="{{__('Search')}}">
+                </form>
+            </div>
             @if (isset($items))
             <table class="table table-striped">
                 <thead>
@@ -58,7 +56,9 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $items->links() }}
+            @if (NULL !== ($items->links()))
+            {{ $items->appends(['desc' => $desc])->links() }}
+            @endif
             @else
             該当するデータが見つかりませんでした。<br>
             @endif
