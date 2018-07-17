@@ -30,4 +30,6 @@ Route::post('where', 'PlaceController@where');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('csv/import', 'CsvController@import');
     Route::post('csv/import', 'CsvController@store');
+    Route::get('csv/export', 'CsvController@export');
+    Route::post('csv/export', 'CsvController@write');
 });

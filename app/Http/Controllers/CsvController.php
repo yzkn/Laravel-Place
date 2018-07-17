@@ -3,28 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\LaravelPlace;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 
 class CsvController extends Controller
 {
+    protected $encoding_sjiswin = 'SJIS-win';
     protected $encoding_utf8 = 'UTF-8';
     protected $encodings = 'ASCII,JIS,UTF-8,eucJP-win,SJIS-win';
+    protected $eol = "\r\n";
     protected $extension_csv = 'csv';
+    protected $filename_export = 'out.csv';
     protected $db_header = array('desc', 'lat', 'lng');
     protected $locale_jajp = 'ja_JP.UTF-8';
+    protected $mimetype_csv = 'text/csv';
     protected $mimetype_text = 'text/plain';
     protected $name_file = 'file';
-    protected $view_csv = 'csv';
+    protected $view_csv_import = 'csv.import';
+    protected $view_csv_export = 'csv.export';
 
     public function import()
     {
         $auth_user = Auth::user();
         $param = ['user' => $auth_user];
-        return view($this->view_csv, $param);
+        return view($this->view_csv_import, $param);
     }
 
+    public function export()
+    {
+        $auth_user = Auth::user();
+        $param = ['user' => $auth_user];
+        return view($this->view_csv_export, $param);
+    }
 
     public function store(Request $request)
     {
@@ -33,7 +45,7 @@ class CsvController extends Controller
 
         if (!$request->hasFile($this->name_file))
         {
-            return view($this->view_csv, $param);
+            return view($this->view_csv_import, $param);
         }
 
         setlocale(LC_ALL, $this->locale_jajp);
@@ -42,22 +54,22 @@ class CsvController extends Controller
 
         if (!$uploaded_file->isValid())
         {
-            return view($this->view_csv, $param);
+            return view($this->view_csv_import, $param);
         }
 
         if ($uploaded_file->getMimeType() !== $this->mimetype_text)
         {
-            return view($this->view_csv, $param);
+            return view($this->view_csv_import, $param);
         }
 
         if ($uploaded_file->getClientOriginalExtension() !== $this->extension_csv)
         {
-            return view($this->view_csv, $param);
+            return view($this->view_csv_import, $param);
         }
 
         if (!$uploaded_file->getClientSize() > 0)
         {
-            return view($this->view_csv, $param);
+            return view($this->view_csv_import, $param);
         }
 
         $filepath = $uploaded_file->getRealPath();
@@ -91,7 +103,7 @@ class CsvController extends Controller
                 }
                 if($this->db_header !== $csv_header) // 順番が違ってもいい場合はarray_diff
                 {
-                    return view($this->view_csv, $param);
+                    return view($this->view_csv_import, $param);
                 }
             }
             else
@@ -100,7 +112,7 @@ class CsvController extends Controller
 
                 if(count($row) !== count($csv_header))
                 {
-                    return view($this->view_csv, $param);
+                    return view($this->view_csv_import, $param);
                 }
 
                 $row_utf8 = array();
@@ -121,6 +133,33 @@ class CsvController extends Controller
             $row_count++;
         }
 
-        return view($this->view_csv, $param);
+        return view($this->view_csv_import, $param);
+    }
+
+    public function write(Request $request)
+    {
+        $auth_user = Auth::user();
+        if( $auth_user===NULL)
+        {
+            return view($this->view_csv_export);
+        }
+
+        setlocale(LC_ALL, $this->locale_jajp);
+
+        $places = LaravelPlace::get($this->db_header)->toArray();
+        $csvHeader = $this->db_header;
+        array_unshift($places, $csvHeader);
+        $stream = fopen('php://temp', 'r+b');
+        foreach ($places as $place) {
+            fputcsv($stream, $place);
+        }
+        rewind($stream);
+        $csv = str_replace(PHP_EOL, $this->eol, stream_get_contents($stream));
+        $csv = mb_convert_encoding($csv, $this->encoding_sjiswin, $this->encoding_utf8);
+        $headers = array(
+            'Content-Type' => $this->mimetype_csv,
+            'Content-Disposition' => 'attachment; filename="' . $this->filename_export . '"',
+        );
+        return \Response::make($csv, 200, $headers);
     }
 }
