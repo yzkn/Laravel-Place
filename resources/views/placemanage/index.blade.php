@@ -16,12 +16,12 @@
             <p>
                 @if (Auth::check())
                 Hi,  {{$user->name}}!
+                <br />
+                <a href="{{ url('place/create') }}">Create</a>
                 @else
                 <a href="/register">{{__('Register')}}</a> | <a href="/login">Sign in</a>
                 @endif
             </p>
-            <br />
-            <a href="{{ url('place/create') }}">Create</a>
             <hr />
             @if (isset($items))
             <table class="table table-striped">

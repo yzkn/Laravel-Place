@@ -42,6 +42,12 @@ class PlaceController extends Controller
      */
     public function create()
     {
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+
         return view('placemanage.place-create');
     }
 
@@ -53,11 +59,16 @@ class PlaceController extends Controller
      */
     public function store(PlaceRequest $request)
     {
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+
         $laravel_place = new LaravelPlace();
         $form = $request->all();
         unset($form['_token']);
 
-        $auth_user = Auth::user();
         $laravel_place->user_id = $auth_user->id;
         $laravel_place->fill($form)->save();
         return redirect('/place');
@@ -102,14 +113,19 @@ class PlaceController extends Controller
      */
     public function update(PlaceRequest $request, $id)
     {
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+
         $this->validate($request, LaravelPlace::$rules);
         $laravel_place = LaravelPlace::find($request->id);
         if(isset($laravel_place)){
             $form = $request->all();
             unset($form['_token']);
 
-            // $auth_user = Auth::user();
-            // $laravel_place->user_id = $auth_user->id;_
+            // $laravel_place->user_id = $auth_user->id;
             $laravel_place->fill($form)->save();
         }
         return redirect('/place');
@@ -123,6 +139,12 @@ class PlaceController extends Controller
      */
     public function destroy($id)
     {
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
             $laravel_place->delete();

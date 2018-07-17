@@ -15,10 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('place', 'PlaceController');
-
-
 Auth::routes();
+
+Route::resource('place', 'PlaceController');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -27,3 +26,8 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('search', 'PlaceController@search');
 Route::get('where', 'PlaceController@where');
 Route::post('where', 'PlaceController@where');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('csv/import', 'CsvController@import');
+    Route::post('csv/import', 'CsvController@store');
+});
