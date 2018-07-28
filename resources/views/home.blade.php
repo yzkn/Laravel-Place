@@ -22,6 +22,8 @@
 
     <hr />
 
+    @include('map.map', ['items'=>$user->places])
+
     Items which you made:
     <div class="table-responsive">
         <table class="table table-striped">
