@@ -15,11 +15,7 @@
     const defLat = 139.767052;
     const defLng = 35.681167;
     const defLoc = [defLat, defLng];
-
-    var points = [
-        [139.767052, 35.681167],
-        [139.773114, 35.698353]
-    ];
+    const icon_url = 'http://dev.openlayers.org/img/marker.png';
 
     window.onload = function () {
         // https://github.com/openlayers/openlayers/releases/tag/v3.20.1
@@ -47,7 +43,7 @@
             view: new ol.View({
                 projection: "EPSG:3857",
                 center: ol.proj.transform(defLoc, "EPSG:4326", "EPSG:3857"),
-                // maxZoom: 18,
+                maxZoom: 30,
                 zoom: 14
             })
         });
@@ -56,22 +52,20 @@
         map.addControl(new ol.control.ZoomSlider());
 
         // マーカー表示
-        var markers = [];
-        var i = 0;
-        // points.forEach(point => {
+        function makeMarkerOverlay(imgSrc, coordinate) {
+            coordinate = ol.proj.transform(coordinate, "EPSG:4326","EPSG:3857");
+            var imgElement = document.createElement('img');
+            imgElement.setAttribute('src', imgSrc);
+            var markerOverlay = new ol.Overlay({
+                element: imgElement,
+                position: coordinate,
+                positioning: 'bottom-center'
+            });
+            return markerOverlay;
+        }
+
         @foreach($items as $item)
-        markers[i] = new ol.Feature({
-            // geometry: new ol.geom.Point(ol.proj.fromLonLat(point)),
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([{{$item->lng}}, {{$item->lat}}])),
-        });
-        map.addLayer(new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [markers[i]]
-            })
-        }));
-        // });
-        i++;
+            map.addOverlay(makeMarkerOverlay(icon_url, [{{$item->lng}}, {{$item->lat}}]));
         @endforeach
     }
-
 </script>
