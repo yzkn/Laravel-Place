@@ -36,6 +36,7 @@
                     <th>{{ __('Longitude') }}</th>
                     <th>{{ __('Created') }}</th>
                     <th>{{ __('Updated') }}</th>
+                    <th>{{ __('User') }}</th>
                     <th>{{ __('Edit') }}</th>
                 </tr>
             </thead>
@@ -51,6 +52,7 @@
                     <td>{{ $item->lng }}</td>
                     <td>{{ $item->created_at }}</td>
                     <td>{{ $item->updated_at }}</td>
+                    <td>{{ $item->getUserName() }}</td>
                     <td>
                         <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
                     </td>

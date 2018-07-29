@@ -1,13 +1,17 @@
 <p>
-    <form id="map_area">
-        <input type="text" id="desc" name="desc" title="名称" value="" />
-        <input type="text" id="lat" name="lat" title="緯度" value="" />
-        <input type="text" id="lng" name="lng" title="経度" value="" />
-        <input type="button" id="add" name="add" value="地図の中心地点をDBに追加する">
+    <form id="map_area" action="/place" method="post">
+        {{ csrf_field() }}
+        <input type="text" id="desc" name="desc" placeholder="名称" value="" />
+        <input type="text" id="owner" name="owner" placeholder="オーナー" value="" />
+        <input type="text" id="lat" name="lat" placeholder="緯度" value="" />
+        <input type="text" id="lng" name="lng" placeholder="経度" value="" />
+        <input type="submit" value="地点をDBに追加する">
     </form>
 </p>
 
 <p>
+    <div id="cursor_position"></div>
+    <br>
     <div id="map" class="map"></div>
 </p>
 
@@ -16,6 +20,7 @@
     const defLng = 35.681167;
     const defLoc = [defLat, defLng];
     const icon_url = 'http://dev.openlayers.org/img/marker.png';
+    const precision = 6; // 小数点以下桁数
 
     window.onload = function () {
         // https://github.com/openlayers/openlayers/releases/tag/v3.20.1
@@ -50,6 +55,26 @@
 
         //ズームスライダー表示
         map.addControl(new ol.control.ZoomSlider());
+
+        // マウス座標表示
+        var mousePosition = new ol.control.MousePosition({
+            coordinateFormat: function(coordinate) {
+                return ol.coordinate.format(coordinate, '{y}, {x}', 4);
+            },
+            projection: 'EPSG:4326',
+            target: document.getElementById('cursor_position'),
+            undefinedHTML: '&nbsp;'
+        });
+        map.addControl(mousePosition);
+
+        // マウスクリックイベント
+        map.on('click', function(evt) {
+            var coordinate = evt.coordinate;
+            var stringifyFunc = ol.coordinate.createStringXY(precision);
+            var outstr = stringifyFunc(ol.proj.transform(coordinate, "EPSG:3857", "EPSG:4326"));
+            document.getElementById('lat').value = outstr.split(', ')[1];
+            document.getElementById('lng').value = outstr.split(', ')[0];
+        });
 
         // マーカー表示
         function makeMarkerOverlay(imgSrc, coordinate) {
