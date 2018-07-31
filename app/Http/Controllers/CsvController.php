@@ -16,7 +16,7 @@ class CsvController extends Controller
     protected $eol = "\r\n";
     protected $extension_csv = 'csv';
     protected $filename_export = 'out.csv';
-    protected $db_header = array('desc', 'lat', 'lng');
+    protected $db_header = array('desc', 'owner', 'lat', 'lng');
     protected $locale_jajp = 'ja_JP.UTF-8';
     protected $mimetype_csv = 'text/csv';
     protected $mimetype_text = 'text/plain';
@@ -122,18 +122,18 @@ class CsvController extends Controller
 
                 // insert
                 $laravel_place = new LaravelPlace();
-                $auth_user = Auth::user();
                 $laravel_place->desc = $row_utf8[0];
-                $laravel_place->lat = $row_utf8[1];
-                $laravel_place->lng = $row_utf8[2];
-                $laravel_place->owner = '';
+                $laravel_place->owner = $row_utf8[1];
+                $laravel_place->lat = $row_utf8[2];
+                $laravel_place->lng = $row_utf8[3];
                 $laravel_place->user_id = $auth_user->id;
                 $laravel_place->save();
             }
             $row_count++;
         }
 
-        return view($this->view_csv_import, $param);
+        //return view($this->view_csv_import, $param);
+        return view('home',['user'=>$auth_user]);
     }
 
     public function write(Request $request)
