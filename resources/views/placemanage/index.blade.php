@@ -8,6 +8,7 @@
         .pagination { font-size: small; }
         .pagination li { display:inline-block; }
     </style>
+    @include('map.map-part-head')
 </head>
 <body>
     <div class="container">
@@ -24,6 +25,10 @@
             </p>
             <hr />
             @if (isset($items))
+
+            @include('map.map', ['items'=>$items])
+
+            Items which you all made:
             <table class="table table-striped">
                 <thead>
                     <tr>
