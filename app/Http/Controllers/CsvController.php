@@ -13,7 +13,8 @@ class CsvController extends Controller
     protected $encoding_sjiswin = 'SJIS-win';
     protected $encoding_utf8 = 'UTF-8';
     protected $encodings = 'ASCII,JIS,UTF-8,eucJP-win,SJIS-win';
-    protected $eol = "\r\n";
+    protected $eol_before = "\n"; #  protected $eol_before = PHP_EOL;
+    protected $eol_after = "\r\n";
     protected $extension_csv = 'csv';
     protected $filename_export = 'out.csv';
     protected $db_header = array('desc', 'owner', 'lat', 'lng');
@@ -132,8 +133,7 @@ class CsvController extends Controller
             $row_count++;
         }
 
-        //return view($this->view_csv_import, $param);
-        return view('home',['user'=>$auth_user]);
+        return redirect('/home');
     }
 
     public function write(Request $request)
@@ -154,7 +154,7 @@ class CsvController extends Controller
             fputcsv($stream, $place);
         }
         rewind($stream);
-        $csv = str_replace(PHP_EOL, $this->eol, stream_get_contents($stream));
+        $csv = str_replace($this->eol_before, $this->eol_after, stream_get_contents($stream));
         $csv = mb_convert_encoding($csv, $this->encoding_sjiswin, $this->encoding_utf8);
         $headers = array(
             'Content-Type' => $this->mimetype_csv,
