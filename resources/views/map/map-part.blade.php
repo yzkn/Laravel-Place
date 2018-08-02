@@ -5,13 +5,20 @@
 </p>
 
 <script>
-    const defLat =  document.getElementById('lat').value; // 35.681167;
-    const defLng = document.getElementById('lng').value; // 139.767052;
-    const defLoc = [defLng, defLat];
+    var defLat =  35.681167;
+    var defLng = 139.767052;
     const icon_url = 'http://dev.openlayers.org/img/marker.png';
     const precision = 6; // 小数点以下桁数
 
     window.onload = function () {
+        // 空欄でないとき
+        if(document.getElementById('lat').value.length>0){
+            defLat =  document.getElementById('lat').value - 0;
+        }
+        if(document.getElementById('lng').value.length>0){
+            defLng = document.getElementById('lng').value - 0;
+        }
+
         // https://github.com/openlayers/openlayers/releases/tag/v3.20.1
         var map = new ol.Map({
             target: "map",
@@ -36,7 +43,7 @@
             }),
             view: new ol.View({
                 projection: "EPSG:3857",
-                center: ol.proj.transform(defLoc, "EPSG:4326", "EPSG:3857"),
+                center: ol.proj.transform([defLng, defLat], "EPSG:4326", "EPSG:3857"),
                 maxZoom: 30,
                 zoom: 14
             })
