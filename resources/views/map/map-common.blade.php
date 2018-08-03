@@ -1,28 +1,17 @@
-<p>
-    <form id="map_area" action="/place" method="post">
-        {{ csrf_field() }}
-        <input type="text" id="desc" name="desc" placeholder="名称" value="" />
-        <input type="text" id="owner" name="owner" placeholder="オーナー" value="" />
-        <input type="text" id="lat" name="lat" placeholder="緯度" value="" />
-        <input type="text" id="lng" name="lng" placeholder="経度" value="" />
-        <input type="submit" value="地点をDBに追加する">
-    </form>
-</p>
 
-<p>
-    <div id="cursor_position"></div>
-    <br>
-    <div id="map" class="map"></div>
-</p>
+        var defLat =  35.681167;
+        var defLng = 139.767052;
+        const icon_url = 'http://dev.openlayers.org/img/marker.png';
+        const precision = 7; // 小数点以下桁数
 
-<script>
-    const defLat = 139.767052;
-    const defLng = 35.681167;
-    const defLoc = [defLat, defLng];
-    const icon_url = 'http://dev.openlayers.org/img/marker.png';
-    const precision = 6; // 小数点以下桁数
+        // 空欄でないとき
+        if(document.getElementById('lat').value.length>0){
+            defLat =  document.getElementById('lat').value - 0;
+        }
+        if(document.getElementById('lng').value.length>0){
+            defLng = document.getElementById('lng').value - 0;
+        }
 
-    window.onload = function () {
         // https://github.com/openlayers/openlayers/releases/tag/v3.20.1
         var map = new ol.Map({
             target: "map",
@@ -47,7 +36,7 @@
             }),
             view: new ol.View({
                 projection: "EPSG:3857",
-                center: ol.proj.transform(defLoc, "EPSG:4326", "EPSG:3857"),
+                center: ol.proj.transform([defLng, defLat], "EPSG:4326", "EPSG:3857"),
                 maxZoom: 30,
                 zoom: 14
             })
@@ -88,9 +77,3 @@
             });
             return markerOverlay;
         }
-
-        @foreach($items as $item)
-            map.addOverlay(makeMarkerOverlay(icon_url, [{{$item->lng}}, {{$item->lat}}]));
-        @endforeach
-    }
-</script>

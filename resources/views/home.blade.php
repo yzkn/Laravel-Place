@@ -22,7 +22,7 @@
 
     <hr />
 
-    @include('map.map', ['items'=>$user->places])
+    @include('map.map-places', ['items'=>$user->places])
 
     Items which you made:
     <div class="table-responsive">

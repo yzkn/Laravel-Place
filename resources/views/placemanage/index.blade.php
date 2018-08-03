@@ -26,7 +26,7 @@
             <hr />
             @if (isset($items))
 
-            @include('map.map', ['items'=>$items])
+            @include('map.map-places', ['items'=>$items])
 
             Items which you all made:
             <table class="table table-striped">
