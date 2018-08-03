@@ -23,50 +23,58 @@
 
     @if (isset($user->places))
 
-    @include('map.map-places', ['items'=>$user->places])
+        @include('map.map-places', ['items'=>$user->places])
 
-    Items which you made:
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>{{ __('ID') }}</th>
-                    <th>{{ __('Description') }}</th>
-                    <th>{{ __('Owner') }}</th>
-                    <th>{{ __('Latitude') }}</th>
-                    <th>{{ __('Longitude') }}</th>
-                    <th>{{ __('Created') }}</th>
-                    <th>{{ __('Updated') }}</th>
-                    <th>{{ __('User') }}</th>
-                    <th>{{ __('Edit') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($user->places as $item)
-                <tr>
-                    <td>
-                        <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
-                    </td>
-                    <td>{{ $item->desc }}</td>
-                    <td>{{ $item->owner }}</td>
-                    <td>{{ $item->lat }}</td>
-                    <td>{{ $item->lng }}</td>
-                    <td>{{ $item->created_at }}</td>
-                    <td>{{ $item->updated_at }}</td>
-                    <td>{{ $item->getUserName() }}</td>
-                    <td>
-                        <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-    @if (NULL !== ($items->links()))
-    {{ $items->links() }}
-    @endif
+        <div class="row justify-content-center mt-5 mb-5">
+            <div class="col-md-12">
+                Items which you made:
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ __('ID') }}</th>
+                                <th>{{ __('Description') }}</th>
+                                <th>{{ __('Owner') }}</th>
+                                <th>{{ __('Latitude') }}</th>
+                                <th>{{ __('Longitude') }}</th>
+                                <th>{{ __('Created') }}</th>
+                                <th>{{ __('Updated') }}</th>
+                                <th>{{ __('User') }}</th>
+                                <th>{{ __('Edit') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($user->places as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
+                                </td>
+                                <td>{{ $item->desc }}</td>
+                                <td>{{ $item->owner }}</td>
+                                <td>{{ $item->lat }}</td>
+                                <td>{{ $item->lng }}</td>
+                                <td>{{ $item->created_at }}</td>
+                                <td>{{ $item->updated_at }}</td>
+                                <td>{{ $item->getUserName() }}</td>
+                                <td>
+                                    <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @if (NULL !== ($items->links()))
+                {{ $items->links() }}
+                @endif
+            </div>
+        </div>
     @else
-    該当するデータが見つかりませんでした。<br>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                該当するデータが見つかりませんでした。
+            </div>
+        </div>
     @endif
 </div>
 @endsection

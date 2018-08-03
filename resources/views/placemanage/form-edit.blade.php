@@ -1,19 +1,43 @@
-<table>
-  <form action="{{ url('place/'.$form->id) }}" method="post">
-    <input type="hidden" name="id" value="{{$form->id}}">
-    {{ method_field('PUT') }}
-    {{ csrf_field() }}
-    <tr><th>desc: </th><td><input type="text" id="desc" name="desc" value="{{$form->desc}}">@if($errors->has('desc')){{implode($errors->get('desc'))}}@endif</td></tr>
-    <tr><th>owner: </th><td><input type="text" id="owner" name="owner" value="{{$form->owner}}">@if($errors->has('owner')){{implode($errors->get('owner'))}}@endif</td></tr>
-    <tr><th>lat: </th><td><input type="number" id="lat" name="lat" value="{{$form->lat}}" min="-90" max="90" step="any">@if($errors->has('lat')){{implode($errors->get('lat'))}}@endif</td></tr>
-    <tr><th>lng: </th><td><input type="number" id="lng" name="lng" value="{{$form->lng}}" min="-180" max="180" step="any">@if($errors->has('lng')){{implode($errors->get('lng'))}}@endif</td></tr>
-    <tr><th></th><td><input type="submit" value="Update"></td></tr>
-  </form>
+<form action="{{ url('place/'.$form->id) }}" method="post">
+    <input type="hidden" name="id" value="{{$form->id}}"> {{ method_field('PUT') }} {{ csrf_field() }}
+    <div class="form-group">
+        <div class="input-group">
+            <label>{{__('Description')}}: </label>
+            <div class="input-group">
+                <input type="text" id="desc" name="desc" value="{{$form->desc}}" class="form-control input-sm">
+            </div>
+            @if($errors->has('desc')){{implode($errors->get('desc'))}}@endif
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="input-group">
+            <label>{{__('Owner')}}: </label>
+            <input type="text" id="owner" name="owner" value="{{$form->owner}}" class="form-control input-sm">
+        </div>
+        @if($errors->has('owner')){{implode($errors->get('owner'))}}@endif
+    </div>
+    <div class="form-group">
+        <div class="input-group">
+            <label>{{__('Latitude')}}: </label>
+            <input type="number" id="lat" name="lat" value="{{$form->lat}}" min="-90" max="90" step="any" class="form-control input-sm">
+        </div>
+        @if($errors->has('lat')){{implode($errors->get('lat'))}}@endif
+    </div>
+    <div class="form-group">
+        <div class="input-group">
+            <label>{{__('Longitude')}}: </label>
+            <input type="number" id="lng" name="lng" value="{{$form->lng}}" min="-180" max="180" step="any" class="form-control input-sm">
+        </div>
+        @if($errors->has('lng')){{implode($errors->get('lng'))}}@endif
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-default" value="Update">
+    </div>
+</form>
 
-  <form action="{{ url('place/'.$form->id) }}" method="post">
-    <input type="hidden" name="id" value="{{$form->id}}">
-    {{ method_field('DELETE') }}
-    {{ csrf_field() }}
-    <tr><th></th><td><input type="submit" value="Delete"></td></tr>
-  </form>
-</table>
+<form action="{{ url('place/'.$form->id) }}" method="post">
+    <div class="form-group">
+        <input type="hidden" name="id" value="{{$form->id}}"> {{ method_field('DELETE') }} {{ csrf_field() }}
+        <input type="submit" class="btn btn-default" value="Delete">
+    </div>
+</form>

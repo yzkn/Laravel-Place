@@ -20,61 +20,77 @@
             </div>
         </div>
     </div>
-    <div>
-        <form action="/where" method="post">
-            {{ method_field('POST') }}
-            {{ csrf_field() }}
-            <input type="text" name="desc" value="">
-            <input type="submit" value="{{__('Search')}}">
-        </form>
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="mt-5 mb-5 ml-5 mr-5">
+                    <form action="/where" method="post">
+                        {{ method_field('POST') }}
+                        {{ csrf_field() }}
+                        <div class="input-group">
+                            <input type="text" name="desc" class="form-control" placeholder="名称">
+                            <input type="submit" class="btn btn-default" value="{{__('Search')}}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     @if (isset($items))
 
-    @include('map.map-places', ['items'=>$items])
+        @include('map.map-places', ['items'=>$items])
 
-    Results:
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>{{ __('ID') }}</th>
-                    <th>{{ __('Description') }}</th>
-                    <th>{{ __('Owner') }}</th>
-                    <th>{{ __('Latitude') }}</th>
-                    <th>{{ __('Longitude') }}</th>
-                    <th>{{ __('Created') }}</th>
-                    <th>{{ __('Updated') }}</th>
-                    <th>{{ __('User') }}</th>
-                    <th>{{ __('Edit') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($items as $item)
-                <tr>
-                    <td>
-                        <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
-                    </td>
-                    <td>{{ $item->desc }}</td>
-                    <td>{{ $item->owner }}</td>
-                    <td>{{ $item->lat }}</td>
-                    <td>{{ $item->lng }}</td>
-                    <td>{{ $item->created_at }}</td>
-                    <td>{{ $item->updated_at }}</td>
-                    <td>{{ $item->getUserName() }}</td>
-                    <td>
-                        <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-    @if (NULL !== ($items->links()))
-    {{ $items->appends(['desc' => $desc])->links() }}
-    @endif
+        <div class="row justify-content-center mt-5 mb-5">
+            <div class="col-md-12">
+                Results:
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ __('ID') }}</th>
+                                <th>{{ __('Description') }}</th>
+                                <th>{{ __('Owner') }}</th>
+                                <th>{{ __('Latitude') }}</th>
+                                <th>{{ __('Longitude') }}</th>
+                                <th>{{ __('Created') }}</th>
+                                <th>{{ __('Updated') }}</th>
+                                <th>{{ __('User') }}</th>
+                                <th>{{ __('Edit') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($items as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
+                                </td>
+                                <td>{{ $item->desc }}</td>
+                                <td>{{ $item->owner }}</td>
+                                <td>{{ $item->lat }}</td>
+                                <td>{{ $item->lng }}</td>
+                                <td>{{ $item->created_at }}</td>
+                                <td>{{ $item->updated_at }}</td>
+                                <td>{{ $item->getUserName() }}</td>
+                                <td>
+                                    <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @if (NULL !== ($items->links()))
+                {{ $items->appends(['desc' => $desc])->links() }}
+                @endif
+            </div>
+        </div>
     @else
-    該当するデータが見つかりませんでした。<br>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                該当するデータが見つかりませんでした。
+            </div>
+        </div>
     @endif
 </div>
 @endsection
