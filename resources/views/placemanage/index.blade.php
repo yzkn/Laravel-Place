@@ -21,7 +21,6 @@
         </div>
     </div>
 
-    <hr />
     @if (isset($user->places))
 
     @include('map.map-places', ['items'=>$user->places])
@@ -63,9 +62,11 @@
             </tbody>
         </table>
     </div>
+    @if (NULL !== ($items->links()))
     {{ $items->links() }}
+    @endif
     @else
-    ŠY“–‚·‚éƒf[ƒ^‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B<br>
+    è©²å½“ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚<br>
     @endif
 </div>
 @endsection

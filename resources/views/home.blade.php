@@ -21,7 +21,6 @@
         </div>
     </div>
 
-    <hr />
     @if (isset($items))
 
     @include('map.map-places', ['items'=>$items])
@@ -63,7 +62,9 @@
             </tbody>
         </table>
     </div>
+    @if (NULL !== ($items->links()))
     {{ $items->links() }}
+    @endif
     @else
     該当するデータが見つかりませんでした。<br>
     @endif
