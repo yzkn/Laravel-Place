@@ -26,7 +26,7 @@ class PlaceController extends Controller
         // return $items->toArray();
 
         // ページネーションありの例
-        $ipp = 5;
+        $ipp = 50;
         $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
 
         if(isset($items)){

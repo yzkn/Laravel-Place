@@ -13,18 +13,20 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                    @if (Auth::check())
                     You are logged in!
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 
     <hr />
+    @if (isset($items))
 
-    @include('map.map-places', ['items'=>$user->places])
+    @include('map.map-places', ['items'=>$items])
 
-    Items which you made:
+    Items which you all made:
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -41,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach ($user->places as $item)
+            @foreach ($items as $item)
                 <tr>
                     <td>
                         <a href="{{ url('place/'.$item->id) }}">{{ $item->id }}</a>
@@ -61,5 +63,9 @@
             </tbody>
         </table>
     </div>
+    {{ $items->links() }}
+    @else
+    該当するデータが見つかりませんでした。<br>
+    @endif
 </div>
 @endsection
