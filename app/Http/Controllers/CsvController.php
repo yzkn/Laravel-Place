@@ -8,6 +8,8 @@ use App\LaravelPlace;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 
+use Illuminate\Support\Facades\Log; // ログ出力で使用
+
 class CsvController extends Controller
 {
     protected $encoding_sjiswin = 'SJIS-win';
@@ -27,21 +29,45 @@ class CsvController extends Controller
 
     public function import()
     {
+        Log::info('CsvController::import()');
+
         $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+        Log::info('auth_user: '.$auth_user->id);
+
         $param = ['user' => $auth_user];
         return view($this->view_csv_import, $param);
     }
 
     public function export()
     {
+        Log::info('CsvController::export()');
+
         $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+        Log::info('auth_user: '.$auth_user->id);
+
         $param = ['user' => $auth_user];
         return view($this->view_csv_export, $param);
     }
 
     public function store(Request $request)
     {
+        Log::info('CsvController::store()');
+
         $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+        Log::info('auth_user: '.$auth_user->id);
+
         $param = ['user' => $auth_user];
 
         if (!$request->hasFile($this->name_file))
@@ -129,6 +155,8 @@ class CsvController extends Controller
                 $laravel_place->lng = $row_utf8[3];
                 $laravel_place->user_id = $auth_user->id;
                 $laravel_place->save();
+
+                Log::info('place: '.implode(";", $laravel_place));
             }
             $row_count++;
         }
@@ -138,11 +166,15 @@ class CsvController extends Controller
 
     public function write(Request $request)
     {
+        Log::info('CsvController::write()');
+
         $auth_user = Auth::user();
         if( $auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return view($this->view_csv_export);
         }
+        Log::info('auth_user: '.$auth_user->id);
 
         setlocale(LC_ALL, $this->locale_jajp);
 
@@ -151,6 +183,7 @@ class CsvController extends Controller
         array_unshift($places, $csvHeader);
         $stream = fopen('php://temp', 'r+b');
         foreach ($places as $place) {
+            Log::info('place: '.implode(";", $place));
             fputcsv($stream, $place);
         }
         rewind($stream);

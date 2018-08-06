@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log; // ログ出力で使用
+
 class LoginController extends Controller
 {
     /*

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB; // ページネーションで使用
 use App\Http\Requests\PlaceRequest; // バリデーションで使用
 use Validator; // フォームからPOSTされるデータに対するバリデーションで使用
 
+use Illuminate\Support\Facades\Log; // ログ出力で使用
+
 class PlaceController extends Controller
 {
     /**
@@ -19,7 +21,14 @@ class PlaceController extends Controller
      */
     public function index()
     {
+        Log::info('PlaceController::index()');
+
         $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+        Log::info('auth_user: '.$auth_user->id);
 
         // シンプルな例
         // $items = LaravelPlace::all();
@@ -42,11 +51,14 @@ class PlaceController extends Controller
      */
     public function create()
     {
+        Log::info('PlaceController::create()');
+
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
             return redirect('/login');
         }
+        Log::info('auth_user: '.$auth_user->id);
 
         return view('placemanage.place-create');
     }
@@ -59,11 +71,14 @@ class PlaceController extends Controller
      */
     public function store(PlaceRequest $request)
     {
+        Log::info('PlaceController::store()');
+
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
             return redirect('/login');
         }
+        Log::info('auth_user: '.$auth_user->id);
 
         $laravel_place = new LaravelPlace();
         $form = $request->all();
@@ -82,6 +97,16 @@ class PlaceController extends Controller
      */
     public function show($id)
     {
+        Log::info('PlaceController::show()');
+
+        if($auth_user===NULL)
+        {
+            Log::info('auth_user: NULL');
+        }
+        else {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
             return view('placemanage.place-show', ['form' => $laravel_place]);
@@ -97,6 +122,15 @@ class PlaceController extends Controller
      */
     public function edit($id)
     {
+        Log::info('PlaceController::edit()');
+
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            return redirect('/login');
+        }
+        Log::info('auth_user: '.$auth_user->id);
+
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
             return view('placemanage.place-edit', ['form' => $laravel_place]);
@@ -113,11 +147,14 @@ class PlaceController extends Controller
      */
     public function update(PlaceRequest $request, $id)
     {
+        Log::info('PlaceController::update()');
+
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
             return redirect('/login');
         }
+        Log::info('auth_user: '.$auth_user->id);
 
         $this->validate($request, LaravelPlace::$rules);
         $laravel_place = LaravelPlace::find($request->id);
@@ -139,11 +176,14 @@ class PlaceController extends Controller
      */
     public function destroy($id)
     {
+        Log::info('PlaceController::destroy()');
+
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
             return redirect('/login');
         }
+        Log::info('auth_user: '.$auth_user->id);
 
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
@@ -160,13 +200,35 @@ class PlaceController extends Controller
      */
     public function search(Request $request)
     {
+        Log::info('PlaceController::search()');
+
         $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            Log::info('auth_user: NULL');
+        }
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
         $param = ['desc'=>'', 'items'=>NULL, 'user' => $auth_user];
         return view('placemanage.search', $param);
     }
 
     public function where(Request $request)
     {
+        Log::info('PlaceController::where()');
+
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            Log::info('auth_user: NULL');
+        }
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+
         $validator = Validator::make(
             $request->all(),
             [ 'desc' => 'required'] // (new PlaceRequest())->rules()
