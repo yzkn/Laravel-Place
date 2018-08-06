@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use Illuminate\Support\Facades\Log; // ログ出力で使用
+
 class PlaceRequest extends FormRequest
 {
     /**
@@ -13,9 +15,23 @@ class PlaceRequest extends FormRequest
      */
     public function authorize()
     {
+        Log::info('PlaceRequest::authorize()');
+
         if ($this->path()==='place' || strpos($this->path(), 'place/') === 0) {
             return true;
         }
+
+        $auth_user = Auth::user();
+        if($auth_user===NULL)
+        {
+            Log::info('auth_user: NULL');
+        }
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('path: '.$this->path());
+
         return false;
     }
 
