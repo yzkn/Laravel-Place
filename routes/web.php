@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\AuthServiceProvider;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,7 +25,7 @@ Route::get('search', 'PlaceController@search');
 Route::get('where', 'PlaceController@where');
 Route::post('where', 'PlaceController@where');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'can:'.AuthServiceProvider::ROLE_DEVELOPER]], function () { // 開発者のみ
     Route::get('csv/import', 'CsvController@import');
     Route::post('csv/import', 'CsvController@store');
     Route::get('csv/export', 'CsvController@export');

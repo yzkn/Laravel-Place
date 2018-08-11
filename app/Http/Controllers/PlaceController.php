@@ -99,6 +99,7 @@ class PlaceController extends Controller
     {
         Log::info('PlaceController::show()');
 
+        $auth_user = Auth::user();
         if($auth_user===NULL)
         {
             Log::info('auth_user: NULL');
