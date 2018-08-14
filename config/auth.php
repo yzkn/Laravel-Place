@@ -109,4 +109,11 @@ return [
         ],
     ],
 
+    'role_number' => [
+        'developer' => 1, // システム開発者
+        'gt_sysadmin' => 10, // システム管理者
+        'gt_editor' => 100, // 登録会員
+        'gt_guest' => 1000, // ゲスト会員
+    ],
+
 ];

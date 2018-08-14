@@ -32,19 +32,19 @@ class AuthServiceProvider extends ServiceProvider
 
         // システム開発者のみ
         Gate::define(self::ROLE_DEVELOPER, function ($user) {
-            return ($user->role == 1);
+            return ($user->role == \Config::get('auth.role_number.developer'));
         });
         // システム開発者とシステム管理者
         Gate::define(self::ROLE_GT_SYSADMIN, function ($user) {
-            return (10 >= $user->role && $user->role >= 1);
+            return (\Config::get('auth.role_number.gt_sysadmin') >= $user->role && $user->role >= \Config::get('auth.role_number.developer'));
         });
         // システム開発者とシステム管理者と登録会員
         Gate::define(self::ROLE_GT_EDITOR, function ($user) {
-            return (100 >= $user->role && $user->role >= 1);
+            return (\Config::get('auth.role_number.gt_editor') >= $user->role && $user->role >= \Config::get('auth.role_number.developer'));
         });
         // ゲスト会員も含めた全てのユーザー
         Gate::define(self::ROLE_GT_GUEST, function ($user) {
-            // return (1000 >= $user->role && $user->role >= 1);
+            // return (\Config::get('auth.role_number.gt_guest') >= $user->role && $user->role >= \Config::get('auth.role_number.developer'));
             return true;
         });
     }

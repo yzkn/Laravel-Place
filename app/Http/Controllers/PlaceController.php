@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Log; // ログ出力で使用
 
 class PlaceController extends Controller
 {
+    public $ipp = 50;
+
+    public function isSysadmin($auth_user){
+        return (\Config::get('auth.role_number.gt_sysadmin') >= $auth_user->role) ? True : False;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,8 +41,7 @@ class PlaceController extends Controller
         // return $items->toArray();
 
         // ページネーションありの例
-        $ipp = 50;
-        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
+        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($this->ipp);
 
         if(isset($items)){
             return view('placemanage.index', ['items' => $items, 'user' => $auth_user]);
@@ -134,7 +139,9 @@ class PlaceController extends Controller
 
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
-            return view('placemanage.place-edit', ['form' => $laravel_place]);
+            if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
+                return view('placemanage.place-edit', ['form' => $laravel_place]);
+            } //
         }
         return redirect('/place');
     }
@@ -160,11 +167,11 @@ class PlaceController extends Controller
         $this->validate($request, LaravelPlace::$rules);
         $laravel_place = LaravelPlace::find($request->id);
         if(isset($laravel_place)){
-            $form = $request->all();
-            unset($form['_token']);
-
-            // $laravel_place->user_id = $auth_user->id;
-            $laravel_place->fill($form)->save();
+            if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
+                $form = $request->all();
+                unset($form['_token']);
+                $laravel_place->fill($form)->save();
+            } //
         }
         return redirect('/place');
     }
@@ -188,7 +195,9 @@ class PlaceController extends Controller
 
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
-            $laravel_place->delete();
+            if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
+                $laravel_place->delete();
+            } //
         }
         return redirect('/place');
     }
@@ -241,15 +250,13 @@ class PlaceController extends Controller
                 ->withInput();
         }
 
-        $ipp = 5;
-
         $place = new LaravelPlace();
         if($request->has('desc')){
             $place = $place->orWhere('desc','like','%'.$request->desc.'%');
         }
         $items = $place
             ->orderBy('id', 'asc')
-            ->simplePaginate($ipp)
+            ->simplePaginate($this->ipp)
             ->appends($request->only(['desc']));
         $param = ['desc'=>$request->desc, 'items'=>$items];
         return view('placemanage.search', $param);

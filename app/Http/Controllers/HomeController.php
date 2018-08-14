@@ -28,9 +28,18 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // echo \Config::get('auth.role_number.developer')==1; echo '#';
+        // echo \Config::get('auth.role_number.gt_sysadmin')==10; echo '#';
+        // echo \Config::get('auth.role_number.gt_editor')==100; echo '#';
+        // echo \Config::get('auth.role_number.gt_guest')==1000; echo '#';
+        // echo \Config::get('auth.default_value.password.sysadmin')=='password'; echo '#';
+        // echo \Config::get('view.ipp')==50; echo '#';
+        // die();
+        // 設定ファイル変更後は、 $php artisan config:cache $php artisan serve
+
         Log::info('HomeController::index()');
 
-        $ipp = 50;
+        $ipp = \Config::get('view.ipp');
         $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
 
         $auth_user = Auth::user();
