@@ -40,11 +40,11 @@ class AuthServiceProvider extends ServiceProvider
         });
         // システム開発者とシステム管理者と登録会員
         Gate::define(self::ROLE_GT_EDITOR, function ($user) {
-            return (10 >= $user->role && $user->role >= 0);
+            return (100 >= $user->role && $user->role >= 1);
         });
         // ゲスト会員も含めた全てのユーザー
         Gate::define(self::ROLE_GT_GUEST, function ($user) {
-            // return (100 >= $user->role && $user->role >= 0);
+            // return (1000 >= $user->role && $user->role >= 1);
             return true;
         });
     }

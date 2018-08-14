@@ -99,4 +99,14 @@ return [
         ],
     ],
 
+    'default_value' => [
+        'password' => [
+            'sysadmin' => 'password'
+        ],
+        'role' => [
+            'sysadmin' => 1,
+            'editor' => 100
+        ],
+    ],
+
 ];
