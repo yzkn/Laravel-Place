@@ -20,6 +20,24 @@
             </div>
         </div>
     </div>
+
+    @if (isset($items))
+        @foreach ($items as $item)
+            <form action="{{ url('user/'.$item->id) }}" method="post" id="form_put_{{ $item->id }}">
+                {{ method_field('PUT') }} {{ csrf_field() }}
+                <input type="hidden" name="id" value="{{ $item->id }}" form="form_put_{{ $item->id }}">
+            </form>
+            <form action="{{ url('user/'.$item->id) }}" method="post" id="form_delete_{{ $item->id }}">
+                {{ method_field('DELETE') }} {{ csrf_field() }}
+                <input type="hidden" name="id" value="{{$item->id}}" form="form_delete_{{ $item->id }}">
+            </form>
+        @endforeach
+    @endif
+    <form action="/user" method="post" id="form_post">
+        {{ csrf_field() }}
+        <input type="hidden" name="id" value="" form="form_post">
+    </form>
+
     <div class="row justify-content-center mt-5 mb-5">
         <div class="col-md-12">
             Users:
@@ -41,41 +59,57 @@
                     @if (isset($items))
                     @foreach ($items as $item)
                         <tr>
+                            <td>{{ $item->id }}</td>
                             <td>
-                                <a href="{{ url('user/'.$item->id) }}">{{ $item->id }}</a>
+                                <input type="text" id="name" name="name" placeholder="{{ __('Name')}}" value="{{ $item->name }}" class="form-control input-sm" form="form_put_{{ $item->id }}">
                             </td>
-                            <td>{{ $item->name }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ isset($item->password) ? 'set' : 'empty' }}</td>
-                            <td>{{ $item->role }}</td>
+                            <td>
+                                <input type="text" id="email" name="email" placeholder="{{ __('Email')}}" value="{{ $item->email }}" class="form-control input-sm" form="form_put_{{ $item->id }}">
+                            </td>
+                            <td>
+                                <input type="text" id="password" name="password" placeholder="{{ __('Password')}}: {{ isset($item->password) ? 'set' : 'empty' }}" value="" class="form-control input-sm" form="form_put_{{ $item->id }}">
+                            </td>
+                            <td>
+                                <!-- input type="text" id="role" name="role" placeholder="{{ __('Role')}}" value="{{ $item->role }}" class="form-control input-sm" form="form_put_{{ $item->id }}" -->
+                                <select id="role" name="role" placeholder="{{ __('Role')}}" class="form-control custom-select custom-select-sm" form="form_put_{{ $item->id }}">
+                                    <option value="">---</option>
+                                    @foreach(config('auth.role_select') as $key => $val)
+                                        <option value="{{$key}}" @if($item->role === $key) selected="selected" @endif>{{$val}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>{{ $item->created_at }}</td>
-                            <td>{{ __('Update') }}</td>
-                            <td>{{ __('Delete') }}</td>
+                            <td><input type="submit" class="btn btn-default" value="{{ __('Update') }}" form="form_put_{{ $item->id }}"></td>
+                            <td><input type="submit" class="btn btn-default" value="{{ __('Delete') }}" form="form_delete_{{ $item->id }}"></td>
                         </tr>
                     @endforeach
                         <tr>
-                            <form action="/user" method="post">
-                                <td></td>
-                                <td>
-                                    <input type="text" id="name" name="name" placeholder="{{ __('Name')}}" class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text" id="email" name="email" placeholder="{{ __('Email')}}" class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text" id="password" name="password" placeholder="{{ __('Password')}}" class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text" id="role" name="role" placeholder="{{ __('Role')}}" class="form-control input-sm">
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                    <input type="submit" class="btn btn-default" value="{{ __('Create') }}">
-                                </td>
-                                <td>
-                                </td>
-                            </form>
+                            <td></td>
+                            <td>
+                                <input type="text" id="name" name="name" placeholder="{{ __('Name')}}" class="form-control input-sm" form="form_post">
+                            </td>
+                            <td>
+                                <input type="text" id="email" name="email" placeholder="{{ __('Email')}}" class="form-control input-sm" form="form_post">
+                            </td>
+                            <td>
+                                <input type="text" id="password" name="password" placeholder="{{ __('Password')}}" class="form-control input-sm" form="form_post">
+                            </td>
+                            <td>
+                                <!-- input type="text" id="role" name="role" placeholder="{{ __('Role')}}" class="form-control input-sm" form="form_post" -->
+                                <select id="role" name="role" placeholder="{{ __('Role')}}" class="form-control custom-select custom-select-sm" form="form_put_{{ $item->id }}">
+                                    <option value="">---</option>
+                                    @foreach(config('auth.role_select') as $key => $val)
+                                        @if($user->role === 1 || $key > 1)
+                                            <option value="{{$key}}" @if(config('auth.default_value.role.editor') === $key) selected="selected" @endif>{{$val}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td> </td>
+                            <td>
+                                <input type="submit" class="btn btn-default" value="{{ __('Create') }}" form="form_post">
+                            </td>
+                            <td></td>
                         </tr>
                     @endif
                     </tbody>

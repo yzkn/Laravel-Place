@@ -9,6 +9,13 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public static $rules_update = array(
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255',
+        //'password' => 'string',
+        'role' => 'required|numeric|max:1000',
+    );
+
     /**
      * The attributes that are mass assignable.
      *
