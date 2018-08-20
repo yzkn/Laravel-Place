@@ -105,7 +105,8 @@ return [
         ],
         'role' => [
             'sysadmin' => 1,
-            'editor' => 100
+            'editor' => 100,
+            'guest' => 1000
         ],
     ],
 
