@@ -28,7 +28,7 @@
                         {{ method_field('POST') }}
                         {{ csrf_field() }}
                         <div class="input-group">
-                            <input type="text" name="desc" class="form-control" placeholder="名称">
+                            <input type="text" name="desc" class="form-control" placeholder="名称" value="{{$desc}}">
                             <input type="submit" class="btn btn-default" value="{{__('Search')}}">
                         </div>
                     </form>
@@ -73,7 +73,7 @@
                                 <td>{{ $item->updated_at }}</td>
                                 <td>{{ $item->getUserName() }}</td>
                                 <td>
-                                    <a href="{{ url('place/'.$item->id.'/edit') }}">Edit</a>
+                                    <a href="{{ url('place/'.$item->id.'/edit') }}" class="btn btn-info">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
