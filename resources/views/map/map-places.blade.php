@@ -8,7 +8,7 @@
                 <input type="text" id="owner" name="owner" placeholder="オーナー" class="form-control" value="" />
                 <input type="text" id="lat" name="lat" placeholder="緯度" class="form-control" value="" />
                 <input type="text" id="lng" name="lng" placeholder="経度" class="form-control" value="" />
-                <input type="submit" class="btn btn-default" value="地点をDBに追加する">
+                <input type="submit" class="btn btn-primary" value="地点をDBに追加する">
             </div>
         </form>
     </div>

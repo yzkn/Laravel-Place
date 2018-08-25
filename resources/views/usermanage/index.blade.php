@@ -14,9 +14,19 @@
                         </div>
                     @endif
                     @if (Auth::check())
-                    You are logged in!
+                        You are logged in!
                     @endif
                 </div>
+                @if($isSysadmin==true)
+                    <div class="card-body">
+                        <a class="btn btn-secondary" href="/csv/import">
+                            {{ __('Import') }}
+                        </a>
+                        <a class="btn btn-secondary" href="/csv/export">
+                            {{ __('Export') }}
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -79,8 +89,8 @@
                                 </select>
                             </td>
                             <td>{{ $item->created_at }}</td>
-                            <td><input type="submit" class="btn btn-default" value="{{ __('Update') }}" form="form_put_{{ $item->id }}"></td>
-                            <td><input type="submit" class="btn btn-default" value="{{ __('Delete') }}" form="form_delete_{{ $item->id }}"></td>
+                            <td><input type="submit" class="btn btn-primary" value="{{ __('Update') }}" form="form_put_{{ $item->id }}"></td>
+                            <td><input type="submit" class="btn btn-danger" value="{{ __('Delete') }}" form="form_delete_{{ $item->id }}"></td>
                         </tr>
                     @endforeach
                         <tr>
@@ -107,7 +117,7 @@
                             </td>
                             <td> </td>
                             <td>
-                                <input type="submit" class="btn btn-default" value="{{ __('Create') }}" form="form_post">
+                                <input type="submit" class="btn btn-primary" value="{{ __('Create') }}" form="form_post">
                             </td>
                             <td></td>
                         </tr>

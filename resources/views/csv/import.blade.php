@@ -1,17 +1,7 @@
-@php
-    $title = __('Places');
-@endphp
-<html>
-<head>
-    <meta charset="utf-8" />
-    <style>
-        .pagination { font-size: small; }
-        .pagination li { display:inline-block; }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <div class="container">
-        <h1>{{ $title }}</h1>
         <div class="table-responsive">
             <p>
                 @if (Auth::check())
@@ -29,5 +19,4 @@
             </form>
         </div>
     </div>
-</body>
-</html>
+@endsection

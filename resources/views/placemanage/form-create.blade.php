@@ -33,6 +33,6 @@
         @if($errors->has('lng')){{implode($errors->get('lng'))}}@endif
     </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-default" value="Create">
+        <input type="submit" class="btn btn-primary" value="Create">
     </div>
 </form>

@@ -37,7 +37,7 @@ class UserController extends Controller
         $items = User::orderBy('id', 'asc')->get();
 
         if(isset($items)){
-            return view('usermanage.index', ['items' => $items, 'user' => $auth_user]);
+            return view('usermanage.index', ['items' => $items, 'user' => $auth_user, 'isSysadmin' => $this->isSysadmin($auth_user)]);
         }
         return redirect('/user');
     }

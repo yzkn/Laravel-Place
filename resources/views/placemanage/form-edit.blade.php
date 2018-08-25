@@ -31,13 +31,11 @@
         @if($errors->has('lng')){{implode($errors->get('lng'))}}@endif
     </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-default" value="Update">
+        <input type="submit" class="btn btn-primary" value="Update">
+        <input type="submit" class="btn btn-danger" value="Delete" form="form_delete">
     </div>
 </form>
 
-<form action="{{ url('place/'.$form->id) }}" method="post">
-    <div class="form-group">
-        <input type="hidden" name="id" value="{{$form->id}}"> {{ method_field('DELETE') }} {{ csrf_field() }}
-        <input type="submit" class="btn btn-default" value="Delete">
-    </div>
+<form action="{{ url('place/'.$form->id) }}" method="post" id="form_delete">
+    <input type="hidden" name="id" value="{{$form->id}}"> {{ method_field('DELETE') }} {{ csrf_field() }}
 </form>
