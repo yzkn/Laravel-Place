@@ -31,9 +31,14 @@ class UserController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('arg: -');
         $items = User::orderBy('id', 'asc')->get();
 
         if(isset($items)){
@@ -55,9 +60,14 @@ class UserController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('request: '.print_r($request->all, true));
 
         $user = new User();
         if(isset($user)){
@@ -85,9 +95,15 @@ class UserController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('request: '.print_r($request->all, true));
+        Log::info('id: '.print_r($id, true));
         $this->validate($request, User::$rules_update);
 
         $user = User::find($request->id);
@@ -128,9 +144,14 @@ class UserController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('id: '.print_r($id, true));
 
         $user = User::find($id);
         if(isset($user)){

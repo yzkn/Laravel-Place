@@ -32,9 +32,14 @@ class PlaceController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('arg: -');
 
         // シンプルな例
         // $items = LaravelPlace::all();
@@ -61,9 +66,14 @@ class PlaceController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('arg: -');
 
         return view('placemanage.place-create');
     }
@@ -81,9 +91,14 @@ class PlaceController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('request: '.print_r($request->all(), true));
 
         $laravel_place = new LaravelPlace();
         $form = $request->all();
@@ -112,6 +127,7 @@ class PlaceController extends Controller
         else {
             Log::info('auth_user: '.$auth_user->id);
         }
+        Log::info('id: '.print_r($id, true));
 
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
@@ -133,9 +149,14 @@ class PlaceController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('id: '.print_r($id, true));
 
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
@@ -160,9 +181,15 @@ class PlaceController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('request: '.print_r($request->all(), true));
+        Log::info('id: '.print_r($id, true));
 
         $this->validate($request, LaravelPlace::$rules);
         $laravel_place = LaravelPlace::find($request->id);
@@ -189,9 +216,14 @@ class PlaceController extends Controller
         $auth_user = Auth::user();
         if($auth_user===NULL)
         {
+            Log::info('auth_user: NULL');
             return redirect('/login');
         }
-        Log::info('auth_user: '.$auth_user->id);
+        else
+        {
+            Log::info('auth_user: '.$auth_user->id);
+        }
+        Log::info('id: '.print_r($id, true));
 
         $laravel_place = LaravelPlace::find($id);
         if(isset($laravel_place)){
@@ -221,6 +253,7 @@ class PlaceController extends Controller
         {
             Log::info('auth_user: '.$auth_user->id);
         }
+        Log::info('request: '.print_r($request->all(), true));
         $param = ['desc'=>'', 'items'=>NULL, 'user' => $auth_user];
         return view('placemanage.search', $param);
     }
@@ -238,6 +271,7 @@ class PlaceController extends Controller
         {
             Log::info('auth_user: '.$auth_user->id);
         }
+        Log::info('request: '.print_r($request->all(), true));
 
         $validator = Validator::make(
             $request->all(),
