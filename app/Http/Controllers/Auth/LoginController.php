@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 
 use Illuminate\Support\Facades\Log; // ログ出力で使用
 
+use App\Events\Logined; // lastloginカラム用
+
 class LoginController extends Controller
 {
     /*
@@ -142,6 +144,8 @@ class LoginController extends Controller
     {
         Log::info('LoginController::authenticated()');
         //
+        // lastloginカラム用
+        event(new Logined());
     }
 
     protected function sendFailedLoginResponse(Request $request)
