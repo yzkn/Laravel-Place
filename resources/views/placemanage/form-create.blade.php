@@ -1,4 +1,4 @@
-<form action="/place" method="post">
+<form action="/place" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="">{{ csrf_field() }}
     <div class="form-group">
         <div class="input-group">
@@ -31,6 +31,15 @@
                >
         </div>
         @if($errors->has('lng')){{implode($errors->get('lng'))}}@endif
+    </div>
+    <div class="form-group">
+        <label>{{__('Image')}}: </label>
+        <input type="file" name="image" class="form-control{{ $errors->has('image') ? ' is-invalid' : '' }}" placeholder="画像ファイル">
+        @if ($errors->has('image'))
+            <span class="invalid-feedback">
+                <strong>{{ $errors->first('image') }}</strong>
+            </span>
+        @endif
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Create">

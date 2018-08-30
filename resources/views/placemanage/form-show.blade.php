@@ -28,6 +28,10 @@
                 readonly="readonly">
         </div>
     </div>
+    <div class="form-group">
+        <label>{{__('Image')}}: </label>
+        <img src="{{ url('/') }}{{$form->image}}">
+    </div>
 </form>
 
 <form action="{{ url('place/'.$form->id) }}" method="post">
