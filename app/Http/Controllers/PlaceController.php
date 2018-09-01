@@ -105,6 +105,17 @@ class PlaceController extends Controller
         unset($form['_token']);
 
         $laravel_place->user_id = $auth_user->id;
+
+        $file = $request->file('image');
+        if(isset($file)){
+            Log::info('image set');
+            $laravel_place->imageorig = $file->getClientOriginalName();
+            $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
+            $laravel_place->image = $hashed_name;
+            Log::info('filenames: '. $laravel_place->imageorig.'\t'.$laravel_place->image);
+        }
+        unset($form['image']);
+
         $laravel_place->fill($form)->save();
         return redirect('/place');
     }
@@ -197,6 +208,25 @@ class PlaceController extends Controller
             if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
                 $form = $request->all();
                 unset($form['_token']);
+
+                $file = $request->file('image');
+                if(isset($file)){
+                    Log::info('image set');
+                    $laravel_place->imageorig = $file->getClientOriginalName();
+                    $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
+                    $laravel_place->image = $hashed_name;
+                    Log::info('filenames: '. $laravel_place->imageorig.'\t'.$laravel_place->image);
+                }
+                if($request->removeImage == TRUE){
+                    Log::info('removeImage: TRUE');
+                    $laravel_place->image = NULL;
+                    $laravel_place->imageorig = NULL;
+                }
+                Log::info('unset image,removeImage');
+                unset($form['image']);
+                unset($form['removeImage']);
+
+                Log::info('fill and save');
                 $laravel_place->fill($form)->save();
             } //
         }

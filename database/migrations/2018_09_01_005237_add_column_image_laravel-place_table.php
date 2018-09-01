@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnLastloginUsersTable extends Migration
+class AddColumnImageLaravelPlaceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddColumnLastloginUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('lastlogin_at')->nullable();
+        Schema::table('laravel-place', function (Blueprint $table) {
+            $table->string('image')->nullable();
+            $table->string('imageorig')->nullable();
         });
     }
 
@@ -25,8 +26,9 @@ class AddColumnLastloginUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('lastlogin_at');
+        Schema::table('laravel-place', function (Blueprint $table) {
+            $table->dropColumn('image');
+            $table->dropColumn('imageorig');
         });
     }
 }

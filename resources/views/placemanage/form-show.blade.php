@@ -30,7 +30,9 @@
     </div>
     <div class="form-group">
         <label>{{__('Image')}}: </label>
-        <img src="{{ url('/') }}{{$form->image}}">
+        @if(isset($form->image))
+            <img src="{{ asset('storage/'.config('file.path').'/'.$form->image) }}" class="img-thumbnail">
+        @endif
     </div>
 </form>
 

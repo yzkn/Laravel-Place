@@ -32,7 +32,13 @@
     </div>
     <div class="form-group">
         <label>{{__('Image')}}: </label>
-        <img src="{{ url('/') }}{{$form->image}}">
+        @if(isset($form->image))
+            <img src="{{ asset('storage/'.config('file.path').'/'.$form->image) }}" class="img-thumbnail">
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="removeImage" name="removeImage">
+                <label class="form-check-label" for="removeImage">{{__('RemoveUploadedImage')}}</label>
+            </div>
+        @endif
         <input type="file" name="image" class="form-control{{ $errors->has('image') ? ' is-invalid' : '' }}" placeholder="画像ファイル">
         @if ($errors->has('image'))
             <span class="invalid-feedback">

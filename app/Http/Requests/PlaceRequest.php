@@ -43,6 +43,7 @@ class PlaceRequest extends FormRequest
     public function rules()
     {
         return [
+            'image' => 'file|dimensions:min_width=1,min_height=1,max_width=500,max_height=500',
             'lat' => 'required|numeric|between:-90,90',
             'lng' => 'required|numeric|between:0,180'
         ];
@@ -51,6 +52,8 @@ class PlaceRequest extends FormRequest
     public function messages()
     {
         return [
+            'image.file'=>'画像ファイルを指定してください。',
+            'image.dimensions'=>'縦横500px以内の画像ファイルを指定してください。',
             'lat.required'=>'必須項目です。',
             'lat.numeric'=>'数値を入力してください。',
             'lat.between'=>'-90から90の範囲で入力してください。',
