@@ -61,6 +61,7 @@
                             <th>{{ __('Password') }}</th>
                             <th>{{ __('Role') }}</th>
                             <th>{{ __('CreatedAt') }}</th>
+                            <th>{{ __('LastloginAt') }}</th>
                             <th>{{ __('Update') }}</th>
                             <th>{{ __('Delete') }}</th>
                         </tr>
@@ -89,6 +90,7 @@
                                 </select>
                             </td>
                             <td>{{ $item->created_at }}</td>
+                            <td>{{ $item->lastlogin_at }}</td>
                             <td><input type="submit" class="btn btn-primary" value="{{ __('Update') }}" form="form_put_{{ $item->id }}"></td>
                             <td><input type="submit" class="btn btn-danger" value="{{ __('Delete') }}" form="form_delete_{{ $item->id }}"></td>
                         </tr>
@@ -115,6 +117,7 @@
                                     @endforeach
                                 </select>
                             </td>
+                            <td> </td>
                             <td> </td>
                             <td>
                                 <input type="submit" class="btn btn-primary" value="{{ __('Create') }}" form="form_post">

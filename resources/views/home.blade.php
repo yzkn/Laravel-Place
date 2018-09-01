@@ -57,7 +57,7 @@
                                 <td>{{ $item->updated_at }}</td>
                                 <td>{{ $item->getUserName() }}</td>
                                 <td>
-                                    <a href="{{ url('place/'.$item->id.'/edit') }}" class="btn btn-info">Edit</a>
+                                    <a href="{{ url('place/'.$item->id.'/edit') }}" class="btn btn-info">{{ __('Edit') }}</a>
                                 </td>
                             </tr>
                         @endforeach
