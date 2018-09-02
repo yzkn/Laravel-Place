@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\LaravelPlace;
+use App\LaravelPlacePhoto;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 use Illuminate\Support\Facades\DB; // ページネーションで使用
@@ -106,17 +107,25 @@ class PlaceController extends Controller
 
         $laravel_place->user_id = $auth_user->id;
 
-        $file = $request->file('image');
-        if(isset($file)){
-            Log::info('image set');
-            $laravel_place->imageorig = $file->getClientOriginalName();
-            $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
-            $laravel_place->image = $hashed_name;
-            Log::info('filenames: '. $laravel_place->imageorig.'\t'.$laravel_place->image);
-        }
+        $files = $request->file('image');
         unset($form['image']);
-
         $laravel_place->fill($form)->save();
+        Log::info('laravel_place: '.print_r($laravel_place, true));
+
+        if(isset($files)){
+            foreach($files as $file){
+                Log::info('image set');
+                $photo = new LaravelPlacePhoto();
+                $photo->place_id =  $laravel_place->id;
+                $photo->imageorig = $file->getClientOriginalName();
+                $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
+                $photo->image = $hashed_name;
+                $photo->save();
+                Log::info('filenames: '. $photo->imageorig.'\t'.$photo->image);
+                Log::info('photo: '.print_r($photo, true));
+            }
+        }
+
         return redirect('/place');
     }
 
@@ -209,18 +218,26 @@ class PlaceController extends Controller
                 $form = $request->all();
                 unset($form['_token']);
 
-                $file = $request->file('image');
-                if(isset($file)){
-                    Log::info('image set');
-                    $laravel_place->imageorig = $file->getClientOriginalName();
-                    $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
-                    $laravel_place->image = $hashed_name;
-                    Log::info('filenames: '. $laravel_place->imageorig.'\t'.$laravel_place->image);
+                $files = $request->file('image');
+                if(isset($files)){
+                    foreach($files as $file){
+                        Log::info('image set');
+                        $photo = new LaravelPlacePhoto();
+                        $photo->place_id =  $laravel_place->id;
+                        $photo->imageorig = $file->getClientOriginalName();
+                        $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
+                        $photo->image = $hashed_name;
+                        $photo->save();
+                        Log::info('filenames: '. $photo->imageorig.'\t'.$photo->image);
+                        Log::info('photo: '.print_r($photo, true));
+                    }
                 }
-                if($request->removeImage == TRUE){
+
+                if(isset($request->removeImage)){
                     Log::info('removeImage: TRUE');
-                    $laravel_place->image = NULL;
-                    $laravel_place->imageorig = NULL;
+                    foreach($request->removeImage as $i){
+                        LaravelPlacePhoto::where('place_id', '=', $laravel_place->id)->where('image', '=', $i)->delete();
+                    }
                 }
                 Log::info('unset image,removeImage');
                 unset($form['image']);

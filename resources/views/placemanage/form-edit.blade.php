@@ -32,14 +32,18 @@
     </div>
     <div class="form-group">
         <label>{{__('Image')}}: </label>
-        @if(isset($form->image))
-            <img src="{{ asset('storage/'.config('file.path').'/'.$form->image) }}" class="img-thumbnail">
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="removeImage" name="removeImage">
-                <label class="form-check-label" for="removeImage">{{__('RemoveUploadedImage')}}</label>
-            </div>
-        @endif
-        <input type="file" name="image" class="form-control{{ $errors->has('image') ? ' is-invalid' : '' }}" placeholder="画像ファイル">
+        <div class="row">
+            @if((\App\LaravelPlacePhoto::where('place_id', '=', $form->id)->count()) > 0)
+                @foreach(\App\LaravelPlacePhoto::where('place_id', '=', $form->id)->get() as $i)
+                    <img src="{{ asset('storage/'.config('file.path').'/'.$i['image']) }}" class="img-thumbnail col-sm-6">
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="removeImage[]" value="{{$i->image}}">
+                        <label class="form-check-label" for="removeImage">{{__('RemoveThisImage')}}</label>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+        <input type="file" name="image[]" class="form-control{{ $errors->has('image') ? ' is-invalid' : '' }}" placeholder="{{__('ImageFiles')}}" multiple>
         @if ($errors->has('image'))
             <span class="invalid-feedback">
                 <strong>{{ $errors->first('image') }}</strong>

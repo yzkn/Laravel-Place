@@ -34,7 +34,7 @@
     </div>
     <div class="form-group">
         <label>{{__('Image')}}: </label>
-        <input type="file" name="image" class="form-control{{ $errors->has('image') ? ' is-invalid' : '' }}" placeholder="画像ファイル">
+        <input type="file" name="image[]" class="form-control{{ $errors->has('image') ? ' is-invalid' : '' }}" placeholder="{{__('ImageFiles')}}" multiple>
         @if ($errors->has('image'))
             <span class="invalid-feedback">
                 <strong>{{ $errors->first('image') }}</strong>

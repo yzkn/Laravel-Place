@@ -43,7 +43,7 @@ class PlaceRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'file|dimensions:min_width=1,min_height=1,max_width=500,max_height=500',
+            'image.*' => 'file|dimensions:min_width=1,min_height=1,max_width=500,max_height=500',
             'lat' => 'required|numeric|between:-90,90',
             'lng' => 'required|numeric|between:0,180'
         ];

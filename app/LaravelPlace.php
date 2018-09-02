@@ -17,7 +17,7 @@ class LaravelPlace extends Model
 
     public function getData()
     {
-        return $this->id . '\t' . $this;
+        return $this->id . "\t" . $this;
     }
 
     public function user()
@@ -34,5 +34,10 @@ class LaravelPlace extends Model
             }
         }
         return '';
+    }
+
+    public function images()
+    {
+        return $this->hasMany('App\LaravelPlacePhoto', 'id');
     }
 }

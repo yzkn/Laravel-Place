@@ -30,9 +30,13 @@
     </div>
     <div class="form-group">
         <label>{{__('Image')}}: </label>
-        @if(isset($form->image))
-            <img src="{{ asset('storage/'.config('file.path').'/'.$form->image) }}" class="img-thumbnail">
-        @endif
+        <div class="row">
+            @if((\App\LaravelPlacePhoto::where('place_id', '=', $form->id)->count()) > 0)
+                @foreach(\App\LaravelPlacePhoto::where('place_id', '=', $form->id)->get() as $i)
+                    <img src="{{ asset('storage/'.config('file.path').'/'.$i['image']) }}" class="img-thumbnail col-sm-6">
+                @endforeach
+            @endif
+        </div>
     </div>
 </form>
 
