@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\LaravelPlace;
+use App\Place;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 
@@ -40,7 +40,7 @@ class HomeController extends Controller
         Log::info('HomeController::index()');
 
         $ipp = \Config::get('view.ipp');
-        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($ipp);
+        $items = Place::orderBy('id', 'asc')->simplePaginate($ipp);
 
         $auth_user = Auth::user();
         if(isset($auth_user)){

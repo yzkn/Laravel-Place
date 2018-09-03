@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LaravelPlacePhoto extends Model
+class PlacePhoto extends Model
 {
-    protected $table = 'laravel-place-photo';
+    protected $table = 'place_photos';
     protected $guarded = array('id');
 
     public static $rules = array(
@@ -17,6 +17,6 @@ class LaravelPlacePhoto extends Model
 
     public function item()
     {
-        return $this->belongsTo('App\LaravelPlace');
+        return $this->belongsTo('App\Place');
     }
 }

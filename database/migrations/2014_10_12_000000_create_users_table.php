@@ -22,9 +22,20 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->tinyInteger('role')->default(0)->index('index_role');
             $table->rememberToken();
             $table->timestamps();
+            $table->timestamp('lastlogin_at')->nullable();
         });
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'SysAdmin',
+                'email' => 'admin@example.net',
+                'password' => Hash::make(\Config::get('auth.default_value.password.sysadmin')),
+                'role' => \Config::get('auth.default_value.role.sysadmin')
+            )
+        );
     }
 
     /**

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\LaravelPlace;
+use App\Place;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 
@@ -148,7 +148,7 @@ class CsvController extends Controller
                 }
 
                 // insert
-                $laravel_place = new LaravelPlace();
+                $laravel_place = new Place();
                 $laravel_place->desc = $row_utf8[0];
                 $laravel_place->owner = $row_utf8[1];
                 $laravel_place->lat = $row_utf8[2];
@@ -178,7 +178,7 @@ class CsvController extends Controller
 
         setlocale(LC_ALL, $this->locale_jajp);
 
-        $places = LaravelPlace::get($this->db_header)->toArray();
+        $places = Place::get($this->db_header)->toArray();
         $csvHeader = $this->db_header;
         array_unshift($places, $csvHeader);
         $stream = fopen('php://temp', 'r+b');

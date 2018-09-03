@@ -36,6 +36,6 @@ class User extends Authenticatable
 
     public function places()
     {
-        return $this->hasMany('App\LaravelPlace');
+        return $this->hasMany('App\Place');
     }
 }

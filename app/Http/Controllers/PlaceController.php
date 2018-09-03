@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\LaravelPlace;
-use App\LaravelPlacePhoto;
+use App\Place;
+use App\PlacePhoto;
 
 use Illuminate\Support\Facades\Auth; // 認証で使用
 use Illuminate\Support\Facades\DB; // ページネーションで使用
@@ -43,11 +43,11 @@ class PlaceController extends Controller
         Log::info('arg: -');
 
         // シンプルな例
-        // $items = LaravelPlace::all();
+        // $items = Place::all();
         // return $items->toArray();
 
         // ページネーションありの例
-        $items = LaravelPlace::orderBy('id', 'asc')->simplePaginate($this->ipp);
+        $items = Place::orderBy('id', 'asc')->simplePaginate($this->ipp);
 
         if(isset($items)){
             return view('placemanage.index', ['items' => $items, 'user' => $auth_user]);
@@ -101,7 +101,7 @@ class PlaceController extends Controller
         }
         Log::info('request: '.print_r($request->all(), true));
 
-        $laravel_place = new LaravelPlace();
+        $laravel_place = new Place();
         $form = $request->all();
         unset($form['_token']);
 
@@ -115,7 +115,7 @@ class PlaceController extends Controller
         if(isset($files)){
             foreach($files as $file){
                 Log::info('image set');
-                $photo = new LaravelPlacePhoto();
+                $photo = new PlacePhoto();
                 $photo->place_id =  $laravel_place->id;
                 $photo->imageorig = $file->getClientOriginalName();
                 $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
@@ -149,7 +149,7 @@ class PlaceController extends Controller
         }
         Log::info('id: '.print_r($id, true));
 
-        $laravel_place = LaravelPlace::find($id);
+        $laravel_place = Place::find($id);
         if(isset($laravel_place)){
             return view('placemanage.place-show', ['form' => $laravel_place]);
         }
@@ -178,7 +178,7 @@ class PlaceController extends Controller
         }
         Log::info('id: '.print_r($id, true));
 
-        $laravel_place = LaravelPlace::find($id);
+        $laravel_place = Place::find($id);
         if(isset($laravel_place)){
             if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
                 return view('placemanage.place-edit', ['form' => $laravel_place]);
@@ -211,8 +211,8 @@ class PlaceController extends Controller
         Log::info('request: '.print_r($request->all(), true));
         Log::info('id: '.print_r($id, true));
 
-        $this->validate($request, LaravelPlace::$rules);
-        $laravel_place = LaravelPlace::find($request->id);
+        $this->validate($request, Place::$rules);
+        $laravel_place = Place::find($request->id);
         if(isset($laravel_place)){
             if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
                 $form = $request->all();
@@ -222,7 +222,7 @@ class PlaceController extends Controller
                 if(isset($files)){
                     foreach($files as $file){
                         Log::info('image set');
-                        $photo = new LaravelPlacePhoto();
+                        $photo = new PlacePhoto();
                         $photo->place_id =  $laravel_place->id;
                         $photo->imageorig = $file->getClientOriginalName();
                         $hashed_name = basename($file->store('public/'.config('file.path'))); // $ php artisan storage:link
@@ -236,7 +236,7 @@ class PlaceController extends Controller
                 if(isset($request->removeImage)){
                     Log::info('removeImage: TRUE');
                     foreach($request->removeImage as $i){
-                        LaravelPlacePhoto::where('place_id', '=', $laravel_place->id)->where('image', '=', $i)->delete();
+                        PlacePhoto::where('place_id', '=', $laravel_place->id)->where('image', '=', $i)->delete();
                     }
                 }
                 Log::info('unset image,removeImage');
@@ -272,7 +272,7 @@ class PlaceController extends Controller
         }
         Log::info('id: '.print_r($id, true));
 
-        $laravel_place = LaravelPlace::find($id);
+        $laravel_place = Place::find($id);
         if(isset($laravel_place)){
             if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
                 $laravel_place->delete();
@@ -331,7 +331,7 @@ class PlaceController extends Controller
                 ->withInput();
         }
 
-        $place = new LaravelPlace();
+        $place = new Place();
         if($request->has('desc')){
             $place = $place->orWhere('desc','like','%'.$request->desc.'%');
         }

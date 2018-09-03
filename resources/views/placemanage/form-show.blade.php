@@ -31,8 +31,8 @@
     <div class="form-group">
         <label>{{__('Image')}}: </label>
         <div class="row">
-            @if((\App\LaravelPlacePhoto::where('place_id', '=', $form->id)->count()) > 0)
-                @foreach(\App\LaravelPlacePhoto::where('place_id', '=', $form->id)->get() as $i)
+            @if((\App\PlacePhoto::where('place_id', '=', $form->id)->count()) > 0)
+                @foreach(\App\PlacePhoto::where('place_id', '=', $form->id)->get() as $i)
                     <img src="{{ asset('storage/'.config('file.path').'/'.$i['image']) }}" class="img-thumbnail col-sm-6">
                 @endforeach
             @endif

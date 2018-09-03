@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\LaravelPlace;
+use App\Place;
 
-class LaravelPlaceTableSeeder extends Seeder
+class PlaceTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,7 +18,7 @@ class LaravelPlaceTableSeeder extends Seeder
             'lat' => 35.0,
             'lng' => 140.0
         ];
-        $laravel_place = new LaravelPlace;
+        $laravel_place = new Place;
         $laravel_place->fill($param)->save();
         $param = [
             'desc' => 'bar',
@@ -26,7 +26,7 @@ class LaravelPlaceTableSeeder extends Seeder
             'lat' => 35.1,
             'lng' => 140.1
         ];
-        $laravel_place = new LaravelPlace;
+        $laravel_place = new Place;
         $laravel_place->fill($param)->save();
     }
 }

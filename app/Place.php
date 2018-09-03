@@ -4,9 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LaravelPlace extends Model
+class Place extends Model
 {
-    protected $table = 'laravel-place';
     protected $guarded = array('id');
 
     public static $rules = array(
@@ -38,6 +37,6 @@ class LaravelPlace extends Model
 
     public function images()
     {
-        return $this->hasMany('App\LaravelPlacePhoto', 'id');
+        return $this->hasMany('App\PlacePhoto', 'id');
     }
 }
