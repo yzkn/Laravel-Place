@@ -12,7 +12,7 @@
 >
 > $ cd .\Documents\works\PHP
 >
-> $ laravel new laraplace
+> $ laravel new Laravel-Place
 
 [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)のインストーラをダウンロード
 
@@ -34,7 +34,7 @@ C:\Program Files\PostgreSQL\10\bin
 
 接続情報を設定
 
-> $ nano .\Documents\works\PHP\Laraplace\.env
+> $ nano .\Documents\works\PHP\Laravel-Place\.env
 
 ```text
 DB_CONNECTION=mysql
@@ -61,6 +61,16 @@ php.ini の以下の行のコメントを解除
 ```text
 ;extension=pdo_pgsql
 ```
+
+リポジトリをローカルにcloneし、既存の laravel new コマンドを実行したディレクトリ内に上書き
+
+以下のコマンドを実行
+
+> $ cd .\Documents\works\PHP\Laravel-Place
+>
+> $ php artisan migrate
+>
+> $ php artisan serve
 
 ...
 

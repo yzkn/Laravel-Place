@@ -275,6 +275,7 @@ class PlaceController extends Controller
         $laravel_place = Place::find($id);
         if(isset($laravel_place)){
             if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
+                PlacePhoto::where('place_id', '=', $laravel_place->id)->delete();
                 $laravel_place->delete();
             } //
         }
