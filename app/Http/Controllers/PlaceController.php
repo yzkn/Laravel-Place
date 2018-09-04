@@ -50,7 +50,7 @@ class PlaceController extends Controller
         $items = Place::orderBy('id', 'asc')->simplePaginate($this->ipp);
 
         if(isset($items)){
-            return view('placemanage.index', ['items' => $items, 'user' => $auth_user]);
+            return view('placemanage.index', ['items' => $items, 'user' => $auth_user, 'isSysadmin' => $this->isSysadmin($auth_user)]);
         }
         return redirect('/place');
     }
@@ -237,6 +237,7 @@ class PlaceController extends Controller
                     Log::info('removeImage: TRUE');
                     foreach($request->removeImage as $i){
                         PlacePhoto::where('place_id', '=', $laravel_place->id)->where('image', '=', $i)->delete();
+                        // 画像ファイルの実体は証跡として残す
                     }
                 }
                 Log::info('unset image,removeImage');
@@ -276,6 +277,8 @@ class PlaceController extends Controller
         if(isset($laravel_place)){
             if($auth_user->id===$laravel_place->user->id || $this->isSysadmin($auth_user)){ //
                 PlacePhoto::where('place_id', '=', $laravel_place->id)->delete();
+                // 画像ファイルの実体は証跡として残す
+
                 $laravel_place->delete();
             } //
         }

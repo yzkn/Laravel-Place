@@ -17,16 +17,6 @@
                         You are logged in!
                     @endif
                 </div>
-                @if($isSysadmin==true)
-                    <div class="card-body">
-                        <a class="btn btn-secondary" href="/csv/import">
-                            {{ __('Import') }}
-                        </a>
-                        <a class="btn btn-secondary" href="/csv/export">
-                            {{ __('Export') }}
-                        </a>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
