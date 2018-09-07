@@ -28,7 +28,13 @@
                         {{ method_field('POST') }}
                         {{ csrf_field() }}
                         <div class="input-group">
-                            <input type="text" name="desc" class="form-control" placeholder="名称" value="{{$desc}}">
+                            <input type="text" name="desc" class="form-control" placeholder="{{__('Description')}}" value="{{$desc}}">
+                        </div>
+                        <div class="input-group form-inline">
+                            <input type="text" name="lat" class="form-control" placeholder="{{__('Latitude')}}" value="{{$lat}}" />&nbsp;
+                            <input type="text" name="lng" class="form-control" placeholder="{{__('Longitude')}}" value="{{$lng}}" />
+                        </div>
+                        <div class="input-group">
                             <input type="submit" class="btn btn-default" value="{{__('Search')}}">
                         </div>
                     </form>

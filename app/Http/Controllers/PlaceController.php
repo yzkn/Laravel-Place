@@ -305,7 +305,7 @@ class PlaceController extends Controller
             Log::info('auth_user: '.$auth_user->id);
         }
         Log::info('request: '.print_r($request->all(), true));
-        $param = ['desc'=>'', 'items'=>NULL, 'user' => $auth_user];
+        $param = ['desc'=>'', 'lat'=>'', 'lng'=>'', 'items'=>NULL, 'user' => $auth_user];
         return view('placemanage.search', $param);
     }
 
@@ -343,7 +343,7 @@ class PlaceController extends Controller
             ->orderBy('id', 'asc')
             ->simplePaginate($this->ipp)
             ->appends($request->only(['desc']));
-        $param = ['desc'=>$request->desc, 'items'=>$items];
+        $param = ['desc'=>$request->desc, 'lat'=>$request->lat, 'lng'=>$request->lng, 'items'=>$items];
         return view('placemanage.search', $param);
     }
 }

@@ -4,11 +4,11 @@
         <form id="map_area" action="/place" method="post">
             {{ csrf_field() }}
             <div class="input-group">
-                <input type="text" id="desc" name="desc" placeholder="名称" class="form-control" value="" />
-                <input type="text" id="owner" name="owner" placeholder="オーナー" class="form-control" value="" />
-                <input type="text" id="lat" name="lat" placeholder="緯度" class="form-control" value="" />
-                <input type="text" id="lng" name="lng" placeholder="経度" class="form-control" value="" />
-                <input type="submit" class="btn btn-primary" value="地点をDBに追加する">
+                <input type="text" id="desc" name="desc" placeholder="{{__('Description')}}" class="form-control" value="" />
+                <input type="text" id="owner" name="owner" placeholder="{{__('Owner')}}" class="form-control" value="" />
+                <input type="text" id="lat" name="lat" placeholder="{{__('Latitude')}}" class="form-control" value="" />
+                <input type="text" id="lng" name="lng" placeholder="{{__('Longitude')}}" class="form-control" value="" />
+                <input type="submit" class="btn btn-primary" value="{{__('AddTheSpotToTheDB')}}">
             </div>
         </form>
     </div>
