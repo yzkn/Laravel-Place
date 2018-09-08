@@ -4,12 +4,14 @@
         const icon_url = 'http://dev.openlayers.org/img/marker.png';
         const precision = 7; // 小数点以下桁数
 
-        // 空欄でないとき
-        if(document.getElementById('lat').value.length>0){
-            defLat =  document.getElementById('lat').value - 0;
-        }
-        if(document.getElementById('lng').value.length>0){
-            defLng = document.getElementById('lng').value - 0;
+        if((document.getElementById('lat')!=null) && (document.getElementById('lng')!=null)){
+            // 空欄でないとき
+            if(document.getElementById('lat').value.length>0){
+                defLat =  document.getElementById('lat').value - 0;
+            }
+            if(document.getElementById('lng').value.length>0){
+                defLng = document.getElementById('lng').value - 0;
+            }
         }
 
         // https://github.com/openlayers/openlayers/releases/tag/v3.20.1
@@ -61,8 +63,10 @@
             var coordinate = evt.coordinate;
             var stringifyFunc = ol.coordinate.createStringXY(precision);
             var outstr = stringifyFunc(ol.proj.transform(coordinate, "EPSG:3857", "EPSG:4326"));
-            document.getElementById('lat').value = outstr.split(', ')[1];
-            document.getElementById('lng').value = outstr.split(', ')[0];
+            if((document.getElementById('lat')!=null) && (document.getElementById('lng')!=null)){
+                document.getElementById('lat').value = outstr.split(', ')[1];
+                document.getElementById('lng').value = outstr.split(', ')[0];
+            }
         });
 
         // マーカー表示
