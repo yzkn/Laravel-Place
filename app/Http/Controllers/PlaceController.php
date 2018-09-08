@@ -326,7 +326,11 @@ class PlaceController extends Controller
 
         $validator = Validator::make(
             $request->all(),
-            [ 'desc' => 'required'] // (new PlaceRequest())->rules()
+            [
+                'desc' => 'required_without:lat,lng',
+                'lat' => 'required_without:desc',
+                'lng' => 'required_without:desc'
+            ]
         );
         if($validator->fails())
         {
@@ -336,13 +340,48 @@ class PlaceController extends Controller
         }
 
         $place = new Place();
-        if($request->has('desc')){
+        if(($request->has('desc')) && (strlen($request->desc) > 0)){
+            Log::info('desc: '.print_r($request->desk, true));
             $place = $place->orWhere('desc','like','%'.$request->desc.'%');
         }
+        if(($request->has('lat'))&&($request->has('lng'))){
+            Log::info('request: '.print_r($request->all(), true));
+            $place = $place->selectRaw(
+                ' * , ' .
+                ' SQRT( ' .
+                '    POWER( COS( RADIANS( ' .
+                ' ? ) ) * 6378.137 * RADIANS( lng - ' . // ?=lat
+                ' ? ) , 2 ) + POWER( 6378.137 * RADIANS( lat - ' . // ?=lng
+                ' ? ) , 2 ) ' . // ?=lat
+                ' ) as dist '
+                ,
+                [
+                    (double)($request->lat),
+                    (double)($request->lng),
+                    (double)($request->lat)
+                ]
+            )
+            ->whereNotNull('lat')
+            ->whereNotNull('lng')
+            ->orderBy('dist', 'asc');
+            Log::info('request: '.print_r( [
+                (double)($request->lat),
+                (double)($request->lng),
+                (double)($request->lat)
+            ], true));
+
+            Log::info('generated query: '.$place->toSql());
+            Log::info('set: '.$place->get());
+        } else {
+            $place = $place->orderBy('id', 'asc');
+            Log::info('order by: id asc');
+            Log::info('generated query: '.$place->toSql());
+            Log::info('set: '.$place->get());
+        }
         $items = $place
-            ->orderBy('id', 'asc')
             ->simplePaginate($this->ipp)
-            ->appends($request->only(['desc']));
+            ->appends($request->only(['desc', 'lat', 'lng']))
+            ;
         $param = ['desc'=>$request->desc, 'lat'=>$request->lat, 'lng'=>$request->lng, 'items'=>$items];
         return view('placemanage.search', $param);
     }
