@@ -62,6 +62,7 @@
                                 <th>{{ __('Created') }}</th>
                                 <th>{{ __('Updated') }}</th>
                                 <th>{{ __('User') }}</th>
+                                <th>{{ __('Distance') }}</th>
                                 <th>{{ __('Edit') }}</th>
                             </tr>
                         </thead>
@@ -78,6 +79,7 @@
                                 <td>{{ $item->created_at }}</td>
                                 <td>{{ $item->updated_at }}</td>
                                 <td>{{ $item->getUserName() }}</td>
+                                <td>{{display_distance($item->dist)}}</td>
                                 <td>
                                     <a href="{{ url('place/'.$item->id.'/edit') }}" class="btn btn-info">Edit</a>
                                 </td>
