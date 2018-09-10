@@ -12,11 +12,25 @@ function startWatch() {
             debugPosition(position);
 
             // 空欄のとき
-            if (document.getElementById('lat').value.length == 0) {
-                document.getElementById('lat').value = position.coords.latitude;
+            if (document.getElementById('lat') != null) {
+                if (document.getElementById('lat').value.length == 0) {
+                    document.getElementById('lat').value = position.coords.latitude;
+                }
             }
-            if (document.getElementById('lng').value.length == 0) {
-                document.getElementById('lng').value = position.coords.longitude;
+            if (document.getElementById('lng') != null) {
+                if (document.getElementById('lng').value.length == 0) {
+                    document.getElementById('lng').value = position.coords.longitude;
+                }
+            }
+            if (document.getElementById('search_lat') != null) {
+                if (document.getElementById('search_lat').value.length == 0) {
+                    document.getElementById('search_lat').value = position.coords.latitude;
+                }
+            }
+            if (document.getElementById('search_lng') != null) {
+                if (document.getElementById('search_lng').value.length == 0) {
+                    document.getElementById('search_lng').value = position.coords.longitude;
+                }
             }
         });
     }

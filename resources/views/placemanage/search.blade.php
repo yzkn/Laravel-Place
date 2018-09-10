@@ -31,8 +31,8 @@
                             <input type="text" name="desc" class="form-control" placeholder="{{__('Description')}}" value="{{$desc}}">
                         </div>
                         <div class="input-group form-inline">
-                            <input type="text" id="lat" name="lat" class="form-control" placeholder="{{__('Latitude')}}" value="{{$lat}}" />&nbsp;
-                            <input type="text" id="lng"name="lng" class="form-control" placeholder="{{__('Longitude')}}" value="{{$lng}}" />
+                            <input type="text" id="search_lat" name="lat" class="form-control" placeholder="{{__('Latitude')}}" value="{{$lat}}" />&nbsp;
+                            <input type="text" id="search_lng" name="lng" class="form-control" placeholder="{{__('Longitude')}}" value="{{$lng}}" />
                         </div>
                         <div class="input-group">
                             <input type="submit" class="btn btn-secondary" value="{{__('Search')}}">

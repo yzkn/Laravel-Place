@@ -4,6 +4,8 @@
         const icon_url = 'http://dev.openlayers.org/img/marker.png';
         const precision = 7; // 小数点以下桁数
 
+        var map;
+
         if((document.getElementById('lat')!=null) && (document.getElementById('lng')!=null)){
             // 空欄でないとき
             if(document.getElementById('lat').value.length>0){
@@ -15,7 +17,7 @@
         }
 
         // https://github.com/openlayers/openlayers/releases/tag/v3.20.1
-        var map = new ol.Map({
+        map = new ol.Map({
             target: "map",
             renderer: ['canvas', 'dom'],
             layers: [
@@ -80,4 +82,29 @@
                 positioning: 'bottom-center'
             });
             return markerOverlay;
+        }
+
+        setOnClick();
+
+        function setOnClick() {
+            document.getElementById('show-entered-location').addEventListener('click', showEnteredLocation, false);
+            function showEnteredLocation() {
+                if((document.getElementById('lat')!=null) && (document.getElementById('lng')!=null)){
+                    // 空欄でないとき
+                    if((document.getElementById('lat').value.length>0) && (document.getElementById('lng').value.length>0)){
+                        if((!isNaN(document.getElementById('lat').value)) && (!isNaN(document.getElementById('lng').value))){
+                            map.getView().setCenter(
+                                ol.proj.transform([
+                                    parseFloat(document.getElementById('lng').value),
+                                    parseFloat(document.getElementById('lat').value)
+                                ],
+                                'EPSG:4326',
+                                'EPSG:3857'
+                                )
+                            );
+                            map.getView().setZoom(16);
+                        }
+                    }
+                }
+            }
         }

@@ -8,7 +8,10 @@
                 <input type="text" id="owner" name="owner" placeholder="{{__('Owner')}}" class="form-control" value="" />
                 <input type="text" id="lat" name="lat" placeholder="{{__('Latitude')}}" class="form-control" value="" />
                 <input type="text" id="lng" name="lng" placeholder="{{__('Longitude')}}" class="form-control" value="" />
+            </div>
+            <div class="input-group">
                 <input type="submit" class="btn btn-outline-primary" value="{{__('AddTheSpotToTheDB')}}">
+                <input type="button" id="show-entered-location" class="btn btn-outline-secondary" value="{{__('ShowEnteredLocation')}}" />
             </div>
         </form>
     </div>
