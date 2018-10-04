@@ -64,6 +64,10 @@
                         </div>
                     </form>
                 </div>
+                <div class="card-body">
+                    <!-- a class="btn btn-link" href="auth/login/facebook">Sign in with Facebook</a -->
+                    <a class="btn btn-link" href="auth/login/twitter">Sign in with Twitter</a>
+                </div>
             </div>
         </div>
     </div>

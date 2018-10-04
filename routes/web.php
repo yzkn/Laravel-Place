@@ -36,3 +36,7 @@ Route::group(['middleware' => ['auth', 'can:'.AuthServiceProvider::ROLE_DEVELOPE
     Route::get('csv/export', 'CsvController@export');
     Route::post('csv/export', 'CsvController@write');
 });
+
+// Socialite
+Route::get('login/{provider}', 'Auth\SocialAccountController@redirectToProvider');
+Route::get('login/{provider}/callback', 'Auth\SocialAccountController@handleProviderCallback');
