@@ -68,6 +68,8 @@ php.ini の以下の行のコメントを解除
 
 > $ cd .\Documents\works\PHP\Laravel-Place
 >
+> $ composer install
+>
 > $ php artisan migrate
 >
 > $ php artisan serve
@@ -76,4 +78,4 @@ php.ini の以下の行のコメントを解除
 
 ---
 
-Copyright (c) 2018 YA-androidapp(https://github.com/YA-androidapp) All rights reserved.
+Copyright (c) 2019 YA-androidapp(https://github.com/YA-androidapp) All rights reserved.
